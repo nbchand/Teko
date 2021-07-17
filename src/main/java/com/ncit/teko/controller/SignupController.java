@@ -23,11 +23,9 @@ public class SignupController {
 
     @PostMapping("/signup")
     public String saveUser(@ModelAttribute User user, Model model){
-        System.out.println("hello");
-
+        
         String username = user.getUsername();
         String email = user.getEmail();
-        System.out.println(username);
 
         if(userService.doesUserAlreadyExists(username,email)){
 
@@ -48,11 +46,15 @@ public class SignupController {
     }
 
     @GetMapping("/verify")
-    public String verifyUser(@Param("code") String code){
+    public String verifyUser(@Param("code") String code, Model  model){
+
         if(userService.verify(code)){
-            return "verification_success";
+
+            model.addAttribute("verificationMessage", "Verification Successful");
+            return "verification";
         }else {
-            return "verification_failure";
+            model.addAttribute("verificationMessage", "Verification Failed");
+            return "verification";
         }
     }
 }

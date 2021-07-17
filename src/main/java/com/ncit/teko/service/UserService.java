@@ -1,5 +1,6 @@
 package com.ncit.teko.service;
 
+import com.ncit.teko.functionality.EmailSender;
 import com.ncit.teko.model.User;
 import com.ncit.teko.repository.UserRepo;
 import net.bytebuddy.utility.RandomString;
@@ -18,7 +19,7 @@ public class UserService {
     private UserRepo userRepo;
 
     @Autowired
-    private JavaMailSender mailSender;
+    private EmailSender emailSender;
 
     public void userSignup(User user){
         String randomCode = RandomString.make(64);
@@ -28,7 +29,7 @@ public class UserService {
         userRepo.save(user);
 
         try {
-            sendVerificationEmail(user);
+            emailSender.sendVerificationEmail(user);
         }catch (Exception e){
             System.out.println(e);
         }
@@ -51,38 +52,7 @@ public class UserService {
         return userRepo.checkUser(email,password);
     }
 
-    public void sendVerificationEmail(User user) throws MessagingException, UnsupportedEncodingException {
-
-        String siteURL = "http://localhost:8080";
-
-        String toAddress = user.getEmail();
-        String fromAddress = "tekomultinational@gmail.com";
-        String senderName = "Ibritz tech";
-        String subject = "Please verify your registration";
-        String content = "Dear [[name]],<br>"
-                + "Please click the link below to verify your registration:<br>"
-                + "<h3><a href=\"[[URL]]\" target=\"_self\">VERIFY</a></h3>"
-                + "Thank you,<br>"
-                + "Your company name.";
-
-        MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message);
-
-        helper.setFrom(fromAddress, senderName);
-        helper.setTo(toAddress);
-        helper.setSubject(subject);
-
-        content = content.replace("[[name]]", user.getFirstname()+" "+user.getLastname());
-        String verifyURL = siteURL+"/verify?code="+user.getVerificationCode();
-
-        content = content.replace("[[URL]]", verifyURL);
-
-        helper.setText(content, true);
-
-        mailSender.send(message);
-
-
-    }
+    
 
     public boolean verify(String code){
         User user = userRepo.checkByVerificationCode(code);

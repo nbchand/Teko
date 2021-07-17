@@ -1,12 +1,10 @@
 package com.ncit.teko.model;
 
 import com.sun.istack.NotNull;
-import lombok.Data;
 
 import javax.persistence.*;
 
 @Entity
-@Data
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -33,5 +31,99 @@ public class User {
     private String verificationCode;
     @Column
     private boolean enabled;
+
+
+    public int getId() {
+        return this.id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getUsername() {
+        return this.username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getFirstname() {
+        return this.firstname;
+    }
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public String getLastname() {
+        return this.lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
+    public String getPassword() {
+        return this.password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getPhoneNumber() {
+        return this.phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getGender() {
+        return this.gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getMoreInformation() {
+        return this.moreInformation;
+    }
+
+    public void setMoreInformation(String moreInformation) {
+        this.moreInformation = moreInformation;
+    }
+
+    public String getEmail() {
+        return this.email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getVerificationCode() {
+        return this.verificationCode;
+    }
+
+    public void setVerificationCode(String verificationCode) {
+        this.verificationCode = verificationCode;
+    }
+
+    public boolean isEnabled() {
+        return this.enabled;
+    }
+
+    public boolean getEnabled() {
+        return this.enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
 
 }

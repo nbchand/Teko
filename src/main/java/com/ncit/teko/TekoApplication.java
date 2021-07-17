@@ -1,6 +1,5 @@
 package com.ncit.teko;
 
-import com.ncit.teko.model.User;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
