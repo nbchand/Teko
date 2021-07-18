@@ -3,12 +3,15 @@ package com.ncit.teko.service;
 import com.ncit.teko.functionality.EmailSender;
 import com.ncit.teko.model.User;
 import com.ncit.teko.repository.UserRepo;
-import net.bytebuddy.utility.RandomString;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import net.bytebuddy.utility.RandomString;
+
 @Service
-public class UserService {
+public class UserSignupService {
+
     @Autowired
     private UserRepo userRepo;
 
@@ -29,10 +32,6 @@ public class UserService {
         }
     }
 
-    public boolean doesUserAlreadyExists(String username,String email){
-        return userRepo.existsUserByUsernameOrEmail(username,email);
-    }
-
     public boolean isUserNameTaken(String username){
         return userRepo.existsUserByUsername(username);
     }
@@ -41,12 +40,10 @@ public class UserService {
         return userRepo.existsUserByEmail(email);
     }
 
-    public User loginUser(String email,String password){
-
-        return userRepo.checkUser(email,password);
+    public boolean doesUserAlreadyExists(String username,String email){
+        return userRepo.existsUserByUsernameOrEmail(username,email);
     }
 
-    
 
     public boolean verify(String code){
         User user = userRepo.checkByVerificationCode(code);
@@ -59,5 +56,4 @@ public class UserService {
             return true;
         }
     }
-
 }

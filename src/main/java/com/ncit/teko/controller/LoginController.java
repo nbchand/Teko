@@ -1,7 +1,7 @@
 package com.ncit.teko.controller;
 
 import com.ncit.teko.model.User;
-import com.ncit.teko.service.UserService;
+import com.ncit.teko.service.UserLoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +15,7 @@ import javax.servlet.http.HttpSession;
 public class LoginController {
 
     @Autowired
-    private UserService userService;
+    private UserLoginService userLoginService;
 
     @GetMapping("/login")
     public String userLogin(){
@@ -24,11 +24,11 @@ public class LoginController {
 
     @PostMapping("/login")
     public String userLogin(@ModelAttribute User user, Model model, HttpSession session){
-        User u = userService.loginUser(user.getEmail(), user.getPassword());
+        User u = userLoginService.loginUser(user.getEmail(), user.getPassword());
 
         if (u != null) {
             if(u.isEnabled()) {
-                session.setAttribute("activeUser", u.getUsername());
+                session.setAttribute("userId", u.getId());
                 session.setMaxInactiveInterval(1000);
                 return "redirect:/profile";
             }

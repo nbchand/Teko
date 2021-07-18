@@ -1,7 +1,8 @@
 package com.ncit.teko.controller;
 
 import com.ncit.teko.model.User;
-import com.ncit.teko.service.UserService;
+import com.ncit.teko.service.UserSignupService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class SignupController {
 
     @Autowired
-    private UserService userService;
+    private UserSignupService userSignupService;
 
     @GetMapping("/")
     public String startPage() {
@@ -27,28 +28,28 @@ public class SignupController {
         String username = user.getUsername();
         String email = user.getEmail();
 
-        if(userService.doesUserAlreadyExists(username,email)){
+        if(userSignupService.doesUserAlreadyExists(username,email)){
 
-            if(userService.isEmailTaken(email)){
+            if(userSignupService.isEmailTaken(email)){
 
                 model.addAttribute("errorMessage", "Account of this email already exists!");
                 return "index";
             }
 
-            if(userService.isUserNameTaken(username)){
+            if(userSignupService.isUserNameTaken(username)){
                 model.addAttribute("errorMessage","Username already taken!");
                 return "index";
             }
 
         }
-        userService.userSignup(user);
+        userSignupService.userSignup(user);
         return "index";
     }
 
     @GetMapping("/verify")
     public String verifyUser(@Param("code") String code, Model  model){
 
-        if(userService.verify(code)){
+        if(userSignupService.verify(code)){
 
             model.addAttribute("verificationMessage", "Verification Successful");
             return "verification";

@@ -140,8 +140,10 @@
     </div>
   </div>
 
+
+
   <!--Update username-->
-  <form method="post" id="updateusernameform">
+  <form method="post" action="/usernameUpdate" id="updateusernameform">
     <div class="modal" id="updateusername" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -155,8 +157,8 @@
           </div>
           <div class="modal-body">
 
-            <!--update username message from Java file-->
-            <div id="updateusernamemessage"></div>
+            <!-- update username message from Java file
+            <div id="updateusernamemessage"></div> -->
 
 
             <div class="form-group">
@@ -301,6 +303,9 @@
       </div>
     </div>
   </form>
+
+          <!--update message from Java file-->
+          <p id="updateMessage" th:text="${updateMessage}" style="text-align: center;"></p>
   <!-- Footer-->
   <div class="footer">
     <div class="container">
@@ -317,7 +322,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <!-- Include all compiled plugins (below), or include individual files as needed -->
   <script src="js/bootstrap.min.js"></script>
-  <script src="profile.js"></script>
+  <!-- <script src="profile.js"></script> -->
 </body>
 
 </html>
