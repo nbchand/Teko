@@ -1,6 +1,7 @@
 package com.ncit.teko.service;
 
 import com.ncit.teko.functionality.EmailSender;
+import com.ncit.teko.functionality.StringHandler;
 import com.ncit.teko.model.User;
 import com.ncit.teko.repository.UserRepo;
 
@@ -22,7 +23,8 @@ public class UserSignupService {
         String randomCode = RandomString.make(64);
         user.setVerificationCode(randomCode);
         user.setEnabled(false);
-
+        user.setFirstname(StringHandler.converToTitleCase(user.getFirstname()));
+        user.setLastname(StringHandler.converToTitleCase(user.getLastname()));
         userRepo.save(user);
 
         try {
@@ -49,11 +51,10 @@ public class UserSignupService {
         User user = userRepo.checkByVerificationCode(code);
         if(user == null || user.isEnabled()){
             return false;
-        }else {
+        }
             user.setVerificationCode(null);
             user.setEnabled(true);
             userRepo.save(user);
             return true;
-        }
     }
 }
