@@ -88,10 +88,10 @@
       <div class="navbar-collapse collapse" id="navbarCollapse">
         <ul class="nav navbar-nav">
           <li><a href="/">Search</a></li>
-          <li class="active"><a href="/profile">Profile</a></li>
+          <!-- <li class="active"><a href="/profile">Profile</a></li> -->
           <li><a href="#">Help</a></li>
           <li><a href="#">Contact us</a></li>
-          <li><a href="/mytrips">My Trips</a></li>
+          <li><a href="/my-trips">My Trips</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
           <li><a href="#">
@@ -103,7 +103,7 @@
 
             </a>
           </li>
-          <li><a href="#"><b>Username</b></a></li>
+          <li><a href="/profile" th:text="${username1}"><b></b></a></li>
           <li><a href="/logout">Log out</a></li>
         </ul>
 
@@ -122,7 +122,7 @@
           <table class="table table-hover table-condensed table-bordered">
             <tr data-target="#updateusername" data-toggle="modal">
               <td>Username</td>
-              <td th:text="${username}"></td>
+              <td th:text="${username1}"></td>
             </tr>
             <tr data-target="#updateemail" data-toggle="modal">
               <td>Email</td>
@@ -143,7 +143,7 @@
 
 
   <!--Update username-->
-  <form method="post" action="/usernameUpdate" id="updateusernameform">
+  <form method="post" action="/profile/update-username" id="updateusernameform">
     <div class="modal" id="updateusername" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -163,8 +163,8 @@
 
             <div class="form-group">
               <label for="username">Username:</label>
-              <input class="form-control" type="text" name="username" id="username" maxlength="30"
-                th:value="${username}">
+              <input class="form-control" type="text" name="username" id="username" maxlength="30" placeholder="enter 4-30 characters"
+                th:value="${username2}">
             </div>
 
           </div>
@@ -180,7 +180,7 @@
   </form>
 
   <!--Update email-->
-  <form method="post" id="updateemailform">
+  <form method="post" action="/profile/update-email" id="updateemailform">
     <div class="modal" id="updateemail" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">

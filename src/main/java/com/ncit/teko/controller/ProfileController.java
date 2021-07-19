@@ -2,6 +2,7 @@ package com.ncit.teko.controller;
 
 import javax.servlet.http.HttpSession;
 
+import com.ncit.teko.functionality.PatternMatcher;
 import com.ncit.teko.model.User;
 import com.ncit.teko.service.UserProfileService;
 import com.ncit.teko.service.UserSignupService;
@@ -32,23 +33,19 @@ public class ProfileController {
             return "index";
         }
         User user = userProfileService.fetchUserByUserId(userId);
-        model.addAttribute("username", user.getUsername());
+        model.addAttribute("username1", "@"+user.getUsername());
+        model.addAttribute("username2", user.getUsername());
         model.addAttribute("email", user.getEmail());
         return "profile";
     }
 
-    @GetMapping("/mytrips")
-    public String showTrips(HttpSession session, Model model){
+    @PostMapping("/profile/update-username")
+    public String updateUserName(@RequestParam("username") String newUsername, RedirectAttributes redirectAttributes, HttpSession session){
 
-        if(session.getAttribute("userId")==null){
-            return "index";
+        if(!PatternMatcher.checkUsernamePattern(newUsername)){
+            redirectAttributes.addFlashAttribute("updateMessage", "invalid username");
+            return "redirect:/profile";
         }
-
-        return "mytrips";
-    }
-
-    @PostMapping("/usernameUpdate")
-    private String updateUserName(@RequestParam("username") String newUsername, RedirectAttributes redirectAttributes, HttpSession session){
 
         if(userSignupService.isUserNameTaken(newUsername)){
 
@@ -61,6 +58,31 @@ public class ProfileController {
 
         redirectAttributes.addFlashAttribute("updateMessage", "username updated successfully");
         return "redirect:/profile";
+    }
+
+    @PostMapping("/profile/update-email")
+    public String updateEmail(@RequestParam("email") String newEmail, RedirectAttributes redirectAttributes, HttpSession session){
+        if(!PatternMatcher.checkEmailPattern(newEmail)){
+            redirectAttributes.addFlashAttribute("updateMessage", "invalid characters in the email");
+            return "redirect:/profile";
+        }
+        if(userSignupService.isEmailTaken(newEmail)){
+            redirectAttributes.addFlashAttribute("updateMessage", "account of this email already exists");
+            return "redirect:/profile";            
+        }
+
+        int userId = (int)session.getAttribute("userId");
+        User user = userProfileService.fetchUserByUserId(userId);
+        
+        userProfileService.sendConfirmMail(user, newEmail);
+        redirectAttributes.addFlashAttribute("updateMessage", "confirmation email sent");
+        return "redirect:/profile";
+    }
+
+    @GetMapping("/profile/change-email")
+    public String setNewEmail(){
+        /* logic here */
+        return "redirect:/";
     }
 
 }

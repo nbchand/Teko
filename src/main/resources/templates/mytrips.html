@@ -146,10 +146,10 @@
               <div class="navbar-collapse collapse" id="navbarCollapse">
                   <ul class="nav navbar-nav">
                     <li><a href="/">Search</a></li>
-                    <li><a href="/profile">Profile</a></li>
+                    <!-- <li><a href="/profile">Profile</a></li> -->
                     <li><a href="#">Help</a></li>
                     <li><a href="#">Contact us</a></li>
-                      <li class="active"><a href="/mytrips">My Trips</a></li>
+                      <li class="active"><a href="/my-trips">My Trips</a></li>
                   </ul>
                   <ul class="nav navbar-nav navbar-right">
                       <li><a href="#">
@@ -157,7 +157,7 @@
                         
                   </a>
               </li>
-              <li><a href="#"><b>Username</b></a></li>
+              <li><a href="/profile" th:text="${username1}"><b></b></a></li>
                     <li><a href="/logout">Log out</a></li>
                   </ul>
               

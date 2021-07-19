@@ -5,7 +5,6 @@ import com.ncit.teko.service.UserLoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import javax.servlet.http.HttpSession;
@@ -17,11 +16,6 @@ public class LoginController {
     @Autowired
     private UserLoginService userLoginService;
 
-    @GetMapping("/login")
-    public String userLogin(){
-        return "index";
-    }
-
     @PostMapping("/login")
     public String userLogin(@ModelAttribute User user, Model model, HttpSession session){
         User u = userLoginService.loginUser(user.getEmail(), user.getPassword());
@@ -30,7 +24,7 @@ public class LoginController {
             if(u.isEnabled()) {
                 session.setAttribute("userId", u.getId());
                 session.setMaxInactiveInterval(1000);
-                return "redirect:/profile";
+                return "redirect:/my-trips";
             }
             else {
                 model.addAttribute("errorMessage","Verify email first");
@@ -38,13 +32,6 @@ public class LoginController {
             }
         }
         model.addAttribute("errorMessage","Acount doesnot exist");
-        return "index";
-    }
-
-    @GetMapping("/logout")
-    public String userLogout(HttpSession session){
-
-        session.invalidate();
         return "index";
     }
 }

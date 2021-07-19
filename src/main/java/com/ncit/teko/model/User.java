@@ -22,8 +22,6 @@ public class User {
     private String phoneNumber;
     @Column
     private String gender;
-    @Column
-    private String moreInformation;
     @NotNull
     @Column(unique = true)
     private String email;
@@ -87,14 +85,6 @@ public class User {
 
     public void setGender(String gender) {
         this.gender = gender;
-    }
-
-    public String getMoreInformation() {
-        return this.moreInformation;
-    }
-
-    public void setMoreInformation(String moreInformation) {
-        this.moreInformation = moreInformation;
     }
 
     public String getEmail() {

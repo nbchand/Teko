@@ -30,7 +30,7 @@ public class EmailSender {
                 + "Please click the link below to verify your registration:<br>"
                 + "<h3><a href=\"[[URL]]\" target=\"_self\">VERIFY</a></h3>"
                 + "Thank you,<br>"
-                + "Your company name.";
+                + "Ibritz tech";
 
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
@@ -40,7 +40,7 @@ public class EmailSender {
         helper.setSubject(subject);
 
         content = content.replace("[[name]]", user.getFirstname()+" "+user.getLastname());
-        String verifyURL = siteURL+"/verify?code="+user.getVerificationCode();
+        String verifyURL = siteURL+"/signup/verify?code="+user.getVerificationCode();
 
         content = content.replace("[[URL]]", verifyURL);
 
@@ -49,6 +49,37 @@ public class EmailSender {
         mailSender.send(message);
 
 
+    }
+
+    public void changeEmailAddress(User user, String email) throws MessagingException, UnsupportedEncodingException{
+        String siteURL = "http://localhost:8080";
+
+        String toAddress = email;
+        String fromAddress = "tekomultinational@gmail.com";
+        String senderName = "Ibritz tech";
+        String subject = "Please confirm your new email";
+        String content = "Dear [[name]],<br>"
+                + "Your verification code is:<br>"
+                +"<h2>[[code]]</h2>"
+                + "<h3><a href=\"[[URL]]\" target=\"_self\">VERIFY</a></h3>"
+                + "Thank you,<br>"
+                + "Ibritz tech";
+
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+
+        helper.setFrom(fromAddress, senderName);
+        helper.setTo(toAddress);
+        helper.setSubject(subject);
+
+        content = content.replace("[[name]]", user.getFirstname()+" "+user.getLastname());
+        String verifyURL = siteURL+"/profile/change-email?id="+user.getId()+"&email="+user.getEmail();
+
+        content = content.replace("[[URL]]", verifyURL);
+
+        helper.setText(content, true);
+
+        mailSender.send(message);
     }
     
 }

@@ -1,5 +1,6 @@
 package com.ncit.teko.service;
 
+import com.ncit.teko.functionality.EmailSender;
 import com.ncit.teko.model.User;
 import com.ncit.teko.repository.UserRepo;
 
@@ -14,13 +15,27 @@ public class UserProfileService {
     @Autowired
     private UserRepo userRepo;
 
-    public User fetchUserByUserId(int userId){
+    @Autowired
+    private EmailSender emailSender;
 
+    public User fetchUserByUserId(int userId){
         return userRepo.findUserByUserId(userId);
     }
 
     public void updateUsername(int userId, String newUsername){
         userRepo.updateUsername(userId, newUsername);
+    }
+
+    public void updateEmail(int userId, String newEmail){
+        userRepo.updateEmail(userId, newEmail);
+    }
+
+    public void sendConfirmMail(User user, String email){
+        try{
+            emailSender.changeEmailAddress(user, email);
+        }catch(Exception e){
+            System.out.println(e);
+        }
     }
     
 }

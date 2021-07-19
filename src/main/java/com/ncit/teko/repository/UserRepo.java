@@ -30,4 +30,7 @@ public interface UserRepo extends JpaRepository<User,Integer> {
     @Query(value = "update user u set u.username = :uName where u.id = :uId", nativeQuery = true)
     void updateUsername(@Param("uId") int userId, @Param("uName") String userName);
 
+    @Modifying(flushAutomatically = true)
+    @Query(value = "update user u set u.email = :e where u.id = :uId", nativeQuery = true)
+    void updateEmail(@Param("uId") int userId, @Param("e") String email);
 }
