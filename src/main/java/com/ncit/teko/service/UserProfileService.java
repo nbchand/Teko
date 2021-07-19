@@ -37,5 +37,16 @@ public class UserProfileService {
             System.out.println(e);
         }
     }
+
+    public boolean validatePassword(User user,String password){
+        if(user.getPassword().equals(password)){
+            return true;
+        }
+        return false;
+    }
+
+    public void updatePassword(int userId, String password){
+        userRepo.updatePassword(userId, password);
+    }
     
 }

@@ -40,7 +40,8 @@ public class ProfileController {
     }
 
     @PostMapping("/profile/update-username")
-    public String updateUserName(@RequestParam("username") String newUsername, RedirectAttributes redirectAttributes, HttpSession session){
+    public String updateUserName(@RequestParam("username") String newUsername,
+                                RedirectAttributes redirectAttributes, HttpSession session){
 
         if(!PatternMatcher.checkUsernamePattern(newUsername)){
             redirectAttributes.addFlashAttribute("updateMessage", "invalid username");
@@ -61,7 +62,9 @@ public class ProfileController {
     }
 
     @PostMapping("/profile/update-email")
-    public String updateEmail(@RequestParam("email") String newEmail, RedirectAttributes redirectAttributes, HttpSession session){
+    public String updateEmail(@RequestParam("email") String newEmail,
+                            RedirectAttributes redirectAttributes, HttpSession session){
+
         if(!PatternMatcher.checkEmailPattern(newEmail)){
             redirectAttributes.addFlashAttribute("updateMessage", "invalid characters in the email");
             return "redirect:/profile";
@@ -83,6 +86,32 @@ public class ProfileController {
     public String setNewEmail(){
         /* logic here */
         return "redirect:/";
+    }
+
+    @PostMapping("/profile/update-password")
+    public String updatePassword(@RequestParam("password1") String prevPassword, 
+                                @RequestParam("password2") String newPassword,
+                                @RequestParam("password3") String confirmNewPassword, 
+                                RedirectAttributes redirectAttributes, HttpSession session){
+
+        int userId = (int)session.getAttribute("userId");
+        User user = userProfileService.fetchUserByUserId(userId);
+
+        if(!userProfileService.validatePassword(user, prevPassword)){
+            redirectAttributes.addFlashAttribute("updateMessage", "old password is incorrect");
+            return "redirect:/profile";
+        }
+        if(!newPassword.equals(confirmNewPassword)){
+            redirectAttributes.addFlashAttribute("updateMessage", "new password and confirmation password don't match");
+            return "redirect:/profile";              
+        }
+        if(!PatternMatcher.checkPasswordPattern(newPassword) || !PatternMatcher.checkPasswordPattern(confirmNewPassword)){
+            redirectAttributes.addFlashAttribute("updateMessage", "new password is invalid");
+            return "redirect:/profile";       
+        }
+        userProfileService.updatePassword(userId, newPassword);
+        redirectAttributes.addFlashAttribute("updateMessage","password updated sucessfully");
+        return "redirect:/profile";
     }
 
 }
