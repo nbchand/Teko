@@ -47,13 +47,13 @@ $(function(){
     }); 
     
     // Click on Create Trip Button
-        $('#addtripform').submit(function(event){
-            $("#result").hide();
-            $("#spinner").css("display", "block");
-            event.preventDefault();
-            data = $('#addtripform').serializeArray();
-            getAddTripDepartureCoordinates();
-        });
+        // $('#addtripform').submit(function(event){
+        //     $("#result").hide();
+        //     $("#spinner").css("display", "block");
+        //     event.preventDefault();
+        //     data = $('#addtripform').serializeArray();
+        //     getAddTripDepartureCoordinates();
+        // });
     
     // Click on Edit Trip Button
     $('#edittripModal').on('show.bs.modal', function (e) {
@@ -161,36 +161,36 @@ $(function(){
 
     }
 
-    function submitAddTripRequest(){
-        console.log(data);
-        $.ajax({
-            url: "addtrips.php",
-            data: data,
-            type: "POST",
-            success: function(data2){
-                console.log(data);
-                if(data2){
-                    $('#result').html(data2);
-                    $("#spinner").css("display", "none");
-                    $("#result").slideDown();
-                }else{
-                    getTrips();
-                    $("#result").hide();
-                    $('#addtripModal').modal('hide');
-                    $("#spinner").css("display", "none");
-                    //empty form
-                    $('#addtripform')[0].reset();
-                }
-        },
-            error: function(){
-                $("#result").html("<div class='alert alert-danger'>There was an error with the Ajax Call. Please try again later.</div>");
-                $("#spinner").css("display", "none");
-                $("#result").fadeIn();
+    // function submitAddTripRequest(){
+    //     console.log(data);
+    //     $.ajax({
+    //         url: "addtrips.php",
+    //         data: data,
+    //         type: "POST",
+    //         success: function(data2){
+    //             console.log(data);
+    //             if(data2){
+    //                 $('#result').html(data2);
+    //                 $("#spinner").css("display", "none");
+    //                 $("#result").slideDown();
+    //             }else{
+    //                 getTrips();
+    //                 $("#result").hide();
+    //                 $('#addtripModal').modal('hide');
+    //                 $("#spinner").css("display", "none");
+    //                 //empty form
+    //                 $('#addtripform')[0].reset();
+    //             }
+    //     },
+    //         error: function(){
+    //             $("#result").html("<div class='alert alert-danger'>There was an error with the Ajax Call. Please try again later.</div>");
+    //             $("#spinner").css("display", "none");
+    //             $("#result").fadeIn();
 
-    }
-        }); 
+    // }
+    //     }); 
 
-    }
+    // }
 
     function getTrips(){
         $("#spinner").css("display", "block");

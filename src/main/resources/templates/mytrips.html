@@ -184,7 +184,7 @@
       </div>
       
       <!--Add a trip form-->
-      <form method="post" id="addtripform">
+      <form method="post" action="/my-trips/create-trip" id="addtripform">
         <div class="modal" id="addtripModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content">
@@ -218,20 +218,20 @@
                 </div> 
                 <div class="form-group">
                     <label for="seatsavailable" class="sr-only">Seats available:</label>
-                    <input type="number" name="seatsavailable" id="seatsavailable" placeholder="Seats available" class="form-control">
+                    <input type="number" name="availableSeats" id="seatsavailable" placeholder="Seats available" class="form-control">
                 </div>  
               <div  class="form-group">
-                    <label><input type="radio" name="regular" id="yes" value="Y">Regular</label>    
-                    <label><input type="radio" name="regular" id="no" value="N">One-off</label>    
+                    <label><input type="radio" name="typeOfTrip" id="yes" value="regular">Regular</label>    
+                    <label><input type="radio" name="typeOfTrip" id="no" value="oneOff">One-off</label>    
                 </div>
                 <div class="checkbox checkbox-inline regular">
-                    <label><input type="checkbox" value="1" id="monday" name="monday"> Monday</label>    
-                    <label><input type="checkbox" value="1" id="tuesday" name="tuesday"> Tuesday</label>    
-                    <label><input type="checkbox" value="1" id="wednesday" name="wednesday"> Wednesday</label>    
-                    <label><input type="checkbox" value="1" id="thursday" name="thursday"> Thursday</label>    
-                    <label><input type="checkbox" value="1" id="friday" name="friday"> Friday</label>    
-                    <label><input type="checkbox" value="1" id="saturday" name="saturday"> Saturday</label>    
-                    <label><input type="checkbox" value="1" id="sunday" name="sunday"> Sunday</label>    
+                    <label><input type="checkbox" value="Monday" id="monday" name="days"> Monday</label>    
+                    <label><input type="checkbox" value="Tuesday" id="tuesday" name="days"> Tuesday</label>    
+                    <label><input type="checkbox" value="Wednesday" id="wednesday" name="days"> Wednesday</label>    
+                    <label><input type="checkbox" value="Thursday" id="thursday" name="days"> Thursday</label>    
+                    <label><input type="checkbox" value="Friday" id="friday" name="days"> Friday</label>    
+                    <label><input type="checkbox" value="Saturday" id="saturday" name="days"> Saturday</label>    
+                    <label><input type="checkbox" value="Sunday" id="sunday" name="days"> Sunday</label>    
                 </div>  
                 <div class="form-group oneoff">
                     <label for="date"  class="sr-only">Date: </label>    
@@ -239,7 +239,7 @@
                 </div>  
                 <div class="form-group time regular oneoff">
                     <label for="time" class="sr-only">Time: </label>    
-                    <input type="time" name="time" id="time" placeholder="Time"  class="form-control">
+                    <input type="time" name="Time" id="time" placeholder="Time"  class="form-control">
                 </div>  
               </div>
               <div class="modal-footer">
@@ -331,6 +331,6 @@
 
 
     <script src="map.js"></script>  
-    <script src="mytrips.js"></script>  
+    <!-- <script src="mytrips.js"></script>   -->
   </body>
 </html>
