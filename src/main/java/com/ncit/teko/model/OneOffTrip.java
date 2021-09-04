@@ -1,6 +1,7 @@
 package com.ncit.teko.model;
 
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -42,8 +43,9 @@ public class OneOffTrip {
         return this.date;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setDate(String date) throws Exception {
+        java.util.Date utilDate = new SimpleDateFormat("EEE d MMM, yyyy").parse(date);
+        this.date = new java.sql.Date(utilDate.getTime());
     }
 
 }

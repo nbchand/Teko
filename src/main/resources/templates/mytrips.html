@@ -235,7 +235,7 @@
                 </div>  
                 <div class="form-group oneoff">
                     <label for="date"  class="sr-only">Date: </label>    
-                    <input name="date" id="date" readonly="readonly" placeholder="Date"  class="form-control">
+                    <input name="Date" id="date" readonly="readonly" placeholder="Date"  class="form-control">
                 </div>  
                 <div class="form-group time regular oneoff">
                     <label for="time" class="sr-only">Time: </label>    
@@ -331,6 +331,31 @@
 
 
     <script src="map.js"></script>  
-    <!-- <script src="mytrips.js"></script>   -->
+    <!-- <script src="mytrips.js"></script> -->
+    <script>
+            $('.regular').hide(); $('.oneoff').hide();
+    
+    // hide/show input depending on whether the trip is a regular or one-off
+    var myradio = $('input[name="typeOfTrip"]');
+    myradio.click(function(){
+        if ($(this).is(':checked'))
+        {
+            if($(this).val() == "regular"){
+                $('.oneoff').hide(); $('.regular').show();
+            }else{
+                $('.regular').hide(); $('.oneoff').show();
+            }
+        }
+    });
+    //Calendar Input
+    $('input[name="date2"], input[name="Date"]').datepicker({
+        showAnim: "fadeIn",
+        numberOfMonths: 1,
+        dateFormat: "D d M, yy",
+        minDate: +1,
+        maxDate: "+12M",
+        showWeek: true
+    });
+    </script>
   </body>
 </html>

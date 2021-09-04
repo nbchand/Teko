@@ -1,5 +1,9 @@
 package com.ncit.teko.controller;
 
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import com.ncit.teko.model.OneOffTrip;
@@ -39,14 +43,23 @@ public class TripController {
 
     @PostMapping("/my-trips/create-trip")
     public String createTrip(@ModelAttribute Trip trip, @ModelAttribute TripType tripType ,
-                            @ModelAttribute RegularTrip regularTrip, //@ModelAttribute OneOffTrip oneOffTrip,
-                            @RequestParam("Time") String time) throws Exception{
+                            @ModelAttribute RegularTrip regularTrip, @RequestParam("Time") String time,
+                            @RequestParam("Date") String date, HttpServletRequest request) throws Exception{
+
+        trip.setTime(time);
+
+        if(request.getParameter("typeOfTrip").equals("oneOff")){
+            OneOffTrip oneOffTrip = new OneOffTrip();
+            oneOffTrip.setDate(date);
+            tripType.setOneOffTrip(oneOffTrip);
+            trip.setTripType(tripType);
+            tripService.createTrip(trip);
+            return "redirect:/my-trips";
+         }
 
         tripType.setRegularTrip(regularTrip);
-        //tripType.setOneOffTrip(oneOffTrip);
 
         trip.setTripType(tripType);
-        trip.setTime(time);
 
         tripService.createTrip(trip);
         return "redirect:/my-trips";
