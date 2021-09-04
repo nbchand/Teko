@@ -8,7 +8,8 @@ import javax.persistence.*;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    @Column(name = "user_id")
+    private int userId;
     @NotNull
     @Column(unique = true)
     private String username;
@@ -31,12 +32,12 @@ public class User {
     private boolean enabled;
 
 
-    public int getId() {
-        return this.id;
+    public int getUserId() {
+        return this.userId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public String getUsername() {

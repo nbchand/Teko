@@ -15,29 +15,30 @@ import com.sun.istack.NotNull;
 public class TripType{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    @Column(name = "trip_type_id")
+    private int tripTypeId;
 
     @NotNull
     @Column(name = "trip_type")
     private String typeOfTrip;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "single_trip_id", referencedColumnName = "id")
+    @JoinColumn(name = "single_trip_id", referencedColumnName = "single_trip_id")
     private OneOffTrip oneOffTrip;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "regular_trip_id", referencedColumnName = "id")
+    @JoinColumn(name = "regular_trip_id", referencedColumnName = "regular_trip_id")
     private RegularTrip regularTrip;
 
     @OneToOne(mappedBy = "tripType")
     private Trip trip;
 
-    public int getId() {
-        return this.id;
+    public int getTripTypeId() {
+        return this.tripTypeId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setTripTypeId(int tripTypeId) {
+        this.tripTypeId = tripTypeId;
     }
 
     public Trip getTrip() {

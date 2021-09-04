@@ -73,7 +73,7 @@ public class EmailSender {
         helper.setSubject(subject);
 
         content = content.replace("[[name]]", user.getFirstname()+" "+user.getLastname());
-        String verifyURL = siteURL+"/profile/change-email?id="+user.getId()+"&email="+user.getEmail();
+        String verifyURL = siteURL+"/profile/change-email?id="+user.getUserId()+"&email="+user.getEmail();
 
         content = content.replace("[[URL]]", verifyURL);
 

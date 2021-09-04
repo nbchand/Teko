@@ -1,32 +1,39 @@
 package com.ncit.teko.model;
 
-import java.util.ArrayList;
+import java.util.Set;
 
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
 @Entity
 public class RegularTrip {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    @Column(name = "regular_trip_id")
+    private int regularTripId;
     
     @Column
-    private ArrayList<String> days;
+    @ElementCollection
+    @CollectionTable(name = "regular_trip_days",
+                    joinColumns = @JoinColumn(name = "regular_trip_id"))
+    private Set<String> days;
 
     @OneToOne(mappedBy = "regularTrip")
     private TripType tripType;
 
-    public int getId() {
-        return this.id;
+    public int getRegularTripId() {
+        return this.regularTripId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setRegularTripId(int regularTripId) {
+        this.regularTripId = regularTripId;
     }
 
     public TripType getTripType() {
@@ -37,13 +44,12 @@ public class RegularTrip {
         this.tripType = tripType;
     }
 
-    public ArrayList<String> getDays() {
+    public Set<String> getDays() {
         return this.days;
     }
 
-    public void setDays(ArrayList<String> days) {
+    public void setDays(Set<String> days) {
         this.days = days;
     }
 
-    
 }

@@ -22,7 +22,7 @@ public class LoginController {
 
         if (u != null) {
             if(u.isEnabled()) {
-                session.setAttribute("userId", u.getId());
+                session.setAttribute("userId", u.getUserId());
                 session.setMaxInactiveInterval(1000);
                 return "redirect:/my-trips";
             }

@@ -13,7 +13,8 @@ import javax.persistence.OneToOne;
 public class OneOffTrip {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    @Column(name = "single_trip_id")
+    private int singleTripId;
 
     @Column
     private Date date;
@@ -21,12 +22,12 @@ public class OneOffTrip {
     @OneToOne(mappedBy = "oneOffTrip")
     private TripType tripType;
 
-    public int getId() {
-        return this.id;
+    public int getSingleTripId() {
+        return this.singleTripId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setSingleTripId(int singleTripId) {
+        this.singleTripId = singleTripId;
     }
 
     public TripType getTripType() {

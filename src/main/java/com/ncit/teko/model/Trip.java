@@ -20,7 +20,8 @@ public class Trip {
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    @Column(name = "trip_id")
+    private int tripId;
 
     @NotNull
     @Column
@@ -43,15 +44,15 @@ public class Trip {
     private Time time;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "type_id", referencedColumnName = "id")
+    @JoinColumn(name = "type_id", referencedColumnName = "trip_type_id")
     private TripType tripType;
 
-    public int getId() {
-        return this.id;
+    public int getTripId() {
+        return this.tripId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setTripId(int tripId) {
+        this.tripId = tripId;
     }
 
     public String getDeparture() {
