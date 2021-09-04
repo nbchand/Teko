@@ -1,17 +1,19 @@
 package com.ncit.teko.model;
 
+import java.sql.Date;
 import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Set;
 
-import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
 
 import com.sun.istack.NotNull;
 
@@ -43,9 +45,22 @@ public class Trip {
     @Column
     private Time time;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "type_id", referencedColumnName = "trip_type_id")
-    private TripType tripType;
+    @Column
+    private Date date;
+
+    @Column
+    @ElementCollection
+    @CollectionTable(name = "regular_trip_days",
+                    joinColumns = @JoinColumn(name = "regular_trip_id"))
+    private Set<String> days;
+
+    @NotNull
+    @Column(name = "trip_type")
+    private String typeOfTrip;
+
+    // @OneToOne(cascade = CascadeType.ALL)
+    // @JoinColumn(name = "type_id", referencedColumnName = "trip_type_id")
+    // private TripType tripType;
 
     public int getTripId() {
         return this.tripId;
@@ -96,12 +111,30 @@ public class Trip {
         this.time = new Time(formatter.parse(time).getTime());
     }
 
-    public TripType getTripType() {
-        return this.tripType;
+    public Date getDate() {
+        return this.date;
     }
 
-    public void setTripType(TripType tripType) {
-        this.tripType = tripType;
+    public void setDate(String date) throws Exception {
+        java.util.Date utilDate = new SimpleDateFormat("EEE d MMM, yyyy").parse(date);
+        this.date = new java.sql.Date(utilDate.getTime());
+    }
+
+
+    public Set<String> getDays() {
+        return this.days;
+    }
+
+    public void setDays(Set<String> days) {
+        this.days = days;
+    }
+
+    public String getTypeOfTrip() {
+        return this.typeOfTrip;
+    }
+
+    public void setTypeOfTrip(String typeOfTrip) {
+        this.typeOfTrip = typeOfTrip;
     }
 
 }

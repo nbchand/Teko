@@ -1,15 +1,11 @@
 package com.ncit.teko.controller;
 
-import java.sql.Date;
-import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
-import com.ncit.teko.model.OneOffTrip;
-import com.ncit.teko.model.RegularTrip;
 import com.ncit.teko.model.Trip;
-import com.ncit.teko.model.TripType;
 import com.ncit.teko.model.User;
 import com.ncit.teko.service.TripService;
 import com.ncit.teko.service.UserProfileService;
@@ -18,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -42,25 +37,32 @@ public class TripController {
     }
 
     @PostMapping("/my-trips/create-trip")
-    public String createTrip(@ModelAttribute Trip trip, @ModelAttribute TripType tripType ,
-                            @ModelAttribute RegularTrip regularTrip, @RequestParam("Time") String time,
-                            @RequestParam("Date") String date, HttpServletRequest request) throws Exception{
+    public String createTrip(@RequestParam("days") String[] days, HttpServletRequest request) throws Exception{
+
+        Trip trip = new Trip();
+
+        String time = request.getParameter("Time");
+        String destination = request.getParameter("destination");
+        String departure = request.getParameter("departure");
+        int price = Integer.parseInt(request.getParameter("price"));
+        int seats = Integer.parseInt(request.getParameter("availableSeats"));
+        String typeOfTrip = request.getParameter("typeOfTrip");
 
         trip.setTime(time);
+        trip.setAvailableSeats(seats);
+        trip.setDeparture(departure);
+        trip.setDestination(destination);
+        trip.setPrice(price);
+        trip.setTypeOfTrip(typeOfTrip);
 
         if(request.getParameter("typeOfTrip").equals("oneOff")){
-            OneOffTrip oneOffTrip = new OneOffTrip();
-            oneOffTrip.setDate(date);
-            tripType.setOneOffTrip(oneOffTrip);
-            trip.setTripType(tripType);
+            String date = request.getParameter("Date");
+            trip.setDate(date);
             tripService.createTrip(trip);
             return "redirect:/my-trips";
          }
-
-        tripType.setRegularTrip(regularTrip);
-
-        trip.setTripType(tripType);
-
+        
+        trip.setDays(Arrays.stream(days).collect(Collectors.toSet()));
         tripService.createTrip(trip);
         return "redirect:/my-trips";
     }
