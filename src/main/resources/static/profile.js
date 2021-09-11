@@ -80,7 +80,7 @@ $("#updateemailform").submit(function(event){
             if(responseData==null){
                 location.href ="/profile";
             }
-            if(responseData=="success"){
+            else if(responseData=="success"){
                 $("#updateemailmessage").html("<div class='alert alert-success'>Confirmation email sent</div>");
             }else{
                 $("#updateemailmessage").html("<div class='alert alert-danger'>"+responseData+"</div>");

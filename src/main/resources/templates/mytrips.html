@@ -204,7 +204,7 @@
       </div>
       
       <!--Add a trip form-->
-      <form method="post" action="/my-trips/create-trip" id="addtripform">
+      <form method="post" id="addtripform">
         <div class="modal" id="addtripModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content">
@@ -218,7 +218,7 @@
               </div>
               <div class="modal-body">
                   
-                  <!--Error message from PHP file-->
+                  <!--Error message from java file-->
                   <div id="result"></div>
                   
                   <!--Google Map-->
@@ -345,54 +345,13 @@
       
       <!--Spinner-->
       <div id="spinner">
-         <img src='ajax-loader.gif' width="64" height="64" />
-         <br>Loading..
+         <img src='ajax-loader.gif' width="64" height="64" style="border-radius: 70%;"/>
+         <!-- <br>Loading.. -->
       </div>
 
 
     <script src="map.js"></script>  
     <!-- <script src="mytrips.js"></script> -->
-    <script>
-            $('.regular').hide(); $('.oneoff').hide();
-    
-    // hide/show input depending on whether the trip is a regular or one-off
-    var myradio = $('input[name="typeOfTrip"]');
-    myradio.click(function(){
-        if ($(this).is(':checked'))
-        {
-            if($(this).val() == "R"){
-                $('.oneoff').hide(); $('.regular').show();
-            }else{
-                $('.regular').hide(); $('.oneoff').show();
-            }
-        }
-    });
-
-        // Edit Trip form: hide All date-time-checkbox inputs
-        $('.regular2').hide(); $('.oneoff2').hide();
-    
-    // hide/show input depending on whether the trip is a regular or one-off
-    var myradio2 = $('input[name="typeOfTrip2"]');
-    myradio2.click(function(){
-        if ($(this).is(':checked'))
-        {
-            if($(this).val() == "R"){
-                $('.oneoff2').hide(); $('.regular2').show();
-            }else{
-                $('.regular2').hide(); $('.oneoff2').show();
-            }
-        }
-    });
-
-    //Calendar Input
-    $('input[name="date2"], input[name="Date"]').datepicker({
-        showAnim: "fadeIn",
-        numberOfMonths: 1,
-        dateFormat: "D d M, yy",
-        minDate: +1,
-        maxDate: "+12M",
-        showWeek: true
-    });
-    </script>
+    <script src="trip.js"></script>
   </body>
 </html>

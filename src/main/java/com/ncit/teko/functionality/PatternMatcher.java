@@ -43,4 +43,12 @@ public class PatternMatcher {
 		Matcher matcher = PATTERN.matcher(password);
         return matcher.matches();
     }
+
+    public static boolean checkNumberPattern(String number){
+        final String NUMBER_REGEX = "^\\d+$";
+        //checks if the string is number or not and nothing else
+		final Pattern PATTERN = Pattern.compile(NUMBER_REGEX);
+		Matcher matcher = PATTERN.matcher(number);
+        return matcher.matches();
+    }
 }

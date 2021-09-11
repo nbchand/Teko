@@ -6,9 +6,5 @@ public class StringHandler {
         char c = word.toUpperCase().charAt(0);
         return c+word.toLowerCase().substring(1);
     }
-
-    public static String arrayToCsv(String[] arr){
-        return String.join(",", arr);
-    }
     
 }

@@ -33,7 +33,7 @@ public class ProfileController {
     public String showProfile(Model model, HttpSession session){
 
         if(session.getAttribute("userId")==null){
-            return "index";
+            return "redirect:/";
         }
 
         int userId = (int)session.getAttribute("userId");
@@ -68,7 +68,7 @@ public class ProfileController {
             return new ResponseEntity<>("invalid characters in the email",HttpStatus.OK);
         }
         if(userSignupService.isEmailTaken(newEmail)){
-            return new ResponseEntity<>("account of this email already exists",HttpStatus.OK);            
+            return new ResponseEntity<>("account of this email already exists",HttpStatus.OK);        
         }
 
         int userId = (int)session.getAttribute("userId");
