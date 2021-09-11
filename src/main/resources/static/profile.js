@@ -1,21 +1,23 @@
-// Ajax call to updateusername.php
+// Ajax call to update-username controller
 $("#updateusernameform").submit(function(event){ 
-    //prevent default php processing
+//prevents loading after form submission
     event.preventDefault();
     //collect user inputs
-    var datatopost = $(this).serializeArray();
-//    console.log(datatopost);
-    //send them to updateusername.php using AJAX
+    // var datatopost = $(this).serializeArray();
+
+    const newUsername = document.getElementById('username').value;
+
     $.ajax({
-        url: "updateusername.php",
+        url: "/profile/update-username",
         type: "POST",
-        data: datatopost,
-        success: function(data){
-            if(data){
-                $("#updateusernamemessage").html(data);
-            }else{
-                location.reload();   
+        contentType: "text/plain",
+        cache: false,
+        data: newUsername,
+        success: function(responseData){
+            if(responseData==null){
+                location.href ="/profile";
             }
+                $("#updateusernamemessage").html("<div class='alert alert-danger'>"+responseData+"</div>");
         },
         error: function(){
             $("#updateusernamemessage").html("<div class='alert alert-danger'>There was an error with the Ajax Call. Please try again later.</div>");
@@ -26,22 +28,27 @@ $("#updateusernameform").submit(function(event){
 
 });
 
-// Ajax call to updatepassword.php
+
 $("#updatepasswordform").submit(function(event){ 
-    //prevent default php processing
+
     event.preventDefault();
-    //collect user inputs
-    var datatopost = $(this).serializeArray();
-//    console.log(datatopost);
-    //send them to updateusername.php using AJAX
+
+    const prevPassword = document.getElementById('currentpassword').value;
+    const newPassword = document.getElementById('password').value;
+    const confirmNewPassword = document.getElementById('password2').value;
+    const datatopost = JSON.stringify({prevPassword,newPassword,confirmNewPassword});
+
     $.ajax({
-        url: "updatepassword.php",
+        url: "/profile/update-password",
         type: "POST",
+        contentType: "application/json",
+        cache: false,
         data: datatopost,
-        success: function(data){
-            if(data){
-                $("#updatepasswordmessage").html(data);
+        success: function(responseData){
+            if(responseData==null){
+                location.href ="/profile";
             }
+                $("#updatepasswordmessage").html("<div class='alert alert-danger'>"+responseData+"</div>");
         },
         error: function(){
             $("#updatepasswordmessage").html("<div class='alert alert-danger'>There was an error with the Ajax Call. Please try again later.</div>");
@@ -54,22 +61,29 @@ $("#updatepasswordform").submit(function(event){
 
 
 
-// Ajax call to updateemail.php
+// Ajax call to update-email controller
 $('#loading').hide();
 $("#updateemailform").submit(function(event){ 
-    //prevent default php processing
     event.preventDefault();
     //collect user inputs
-    var datatopost = $(this).serializeArray();
-//    console.log(datatopost);
-    //send them to updateusername.php using AJAX
+    // var datatopost = $(this).serializeArray();
+
+    const newEmail = document.getElementById('email').value;
+
     $.ajax({
-        url: "updateemail.php",
+        url: "/profile/update-email",
         type: "POST",
-        data: datatopost,
-        success: function(data){
-            if(data){
-                $("#updateemailmessage").html(data);
+        contentType: "text/plain",
+        cache: false,
+        data: newEmail,
+        success: function(responseData){
+            if(responseData==null){
+                location.href ="/profile";
+            }
+            if(responseData=="success"){
+                $("#updateemailmessage").html("<div class='alert alert-success'>Confirmation email sent</div>");
+            }else{
+                $("#updateemailmessage").html("<div class='alert alert-danger'>"+responseData+"</div>");
             }
         },
         error: function(){

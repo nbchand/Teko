@@ -4,7 +4,7 @@ import java.sql.Date;
 import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
@@ -17,8 +17,11 @@ import javax.persistence.JoinColumn;
 
 import com.sun.istack.NotNull;
 
+
 @Entity
 public class Trip {
+
+    private static final long serialVersionUID = 100L;
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -48,19 +51,22 @@ public class Trip {
     @Column
     private Date date;
 
+    // @Column
+    // @ElementCollection
+    // @CollectionTable(name = "regular_trip_days",
+    //                 joinColumns = @JoinColumn(name = "regular_trip_id"))
+    // private List<String> days;
+
     @Column
-    @ElementCollection
-    @CollectionTable(name = "regular_trip_days",
-                    joinColumns = @JoinColumn(name = "regular_trip_id"))
-    private Set<String> days;
+    private String days;
 
     @NotNull
     @Column(name = "trip_type")
-    private String typeOfTrip;
+    private char typeOfTrip;
 
-    // @OneToOne(cascade = CascadeType.ALL)
-    // @JoinColumn(name = "type_id", referencedColumnName = "trip_type_id")
-    // private TripType tripType;
+    @Column(name = "user_user_id")
+    private int uId;
+
 
     public int getTripId() {
         return this.tripId;
@@ -120,21 +126,28 @@ public class Trip {
         this.date = new java.sql.Date(utilDate.getTime());
     }
 
-
-    public Set<String> getDays() {
+    public String getDays() {
         return this.days;
     }
 
-    public void setDays(Set<String> days) {
+    public void setDays(String days) {
         this.days = days;
     }
 
-    public String getTypeOfTrip() {
+    public char getTypeOfTrip() {
         return this.typeOfTrip;
     }
 
-    public void setTypeOfTrip(String typeOfTrip) {
+    public void setTypeOfTrip(char typeOfTrip) {
         this.typeOfTrip = typeOfTrip;
+    }
+
+    public int getUId() {
+        return this.uId;
+    }
+
+    public void setUId(int uId) {
+        this.uId = uId;
     }
 
 }

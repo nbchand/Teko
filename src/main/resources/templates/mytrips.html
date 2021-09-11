@@ -157,7 +157,7 @@
                         
                   </a>
               </li>
-              <li><a href="/profile" th:text="${username1}"><b></b></a></li>
+              <li><a href="/profile" th:text="'@'+${username}"><b></b></a></li>
                     <li><a href="/logout">Log out</a></li>
                   </ul>
               
@@ -176,7 +176,27 @@
                       </button>
                   </div>
                   <div id="mytrips" class="trips">
-                      <!--Ajax Call to php file-->
+                    <th:block th:each="trip: ${trips}">
+                        <div class="row trip">
+                          <div class="col-sm-8 journey">
+                              <div><span class="departure">Departure: </span><span th:text="${trip.departure}"></span></div>
+                              <div><span class="destination">Destination: </span><span  th:text="${trip.destination}"></span></div>
+                              <div>
+                                  <span th:text="${trip.typeOfTrip}=='O'?${#dates.format(trip.date, 'E dd MMM, yyyy')}:${trip.days}"></span>
+                                  <span class="time" th:text="' at '+${#dates.format(trip.time, 'hh:mm aa')}"></span>
+                              </div>
+                              <div th:text="${trip.typeOfTrip}=='O'?'One-Off journey':'Regular'"></div>
+                          </div>
+                          <div class="col-sm-2 price">
+                              <div class="price" th:text="'$'+${trip.price}"></div>
+                              <div class="perseat">Per Seat</div>
+                              <div class="seatsavailable" th:text="${trip.availableSeats}+' left'"></div>
+                          </div>
+                          <div class="col-sm-2">
+                              <button class= "btn green edit btn-lg" data-target="#edittripModal" data-toggle="modal" data-trip_id="'.$row['trip_id'].'">Edit</button>
+                          </div>
+                        </div>
+                      </th:block>
                   </div>
               </div>
 
@@ -221,17 +241,17 @@
                     <input type="number" name="availableSeats" id="seatsavailable" placeholder="Seats available" class="form-control">
                 </div>  
               <div  class="form-group">
-                    <label><input type="radio" name="typeOfTrip" id="yes" value="regular">Regular</label>    
-                    <label><input type="radio" name="typeOfTrip" id="no" value="oneOff">One-off</label>    
+                    <label><input type="radio" name="typeOfTrip" id="yes" value="R">Regular</label>    
+                    <label><input type="radio" name="typeOfTrip" id="no" value="O">One-off</label>    
                 </div>
                 <div class="checkbox checkbox-inline regular">
-                    <label><input type="checkbox" value="Monday" id="monday" name="days"> Monday</label>    
-                    <label><input type="checkbox" value="Tuesday" id="tuesday" name="days"> Tuesday</label>    
-                    <label><input type="checkbox" value="Wednesday" id="wednesday" name="days"> Wednesday</label>    
-                    <label><input type="checkbox" value="Thursday" id="thursday" name="days"> Thursday</label>    
-                    <label><input type="checkbox" value="Friday" id="friday" name="days"> Friday</label>    
-                    <label><input type="checkbox" value="Saturday" id="saturday" name="days"> Saturday</label>    
-                    <label><input type="checkbox" value="Sunday" id="sunday" name="days"> Sunday</label>    
+                    <label><input type="checkbox" value="Mon" id="monday" name="days"> Monday</label>    
+                    <label><input type="checkbox" value="Tue" id="tuesday" name="days"> Tuesday</label>    
+                    <label><input type="checkbox" value="Wed" id="wednesday" name="days"> Wednesday</label>    
+                    <label><input type="checkbox" value="Thu" id="thursday" name="days"> Thursday</label>    
+                    <label><input type="checkbox" value="Fri" id="friday" name="days"> Friday</label>    
+                    <label><input type="checkbox" value="Sat" id="saturday" name="days"> Saturday</label>    
+                    <label><input type="checkbox" value="Sun" id="sunday" name="days"> Sunday</label>    
                 </div>  
                 <div class="form-group oneoff">
                     <label for="date"  class="sr-only">Date: </label>    
@@ -286,8 +306,8 @@
                     <input type="number" name="seatsavailable2" placeholder="Seats available" class="form-control" id="seatsavailable2">
                 </div>  
               <div  class="form-group">
-                    <label><input type="radio" name="regular2" id="yes2" value="Y">Regular</label>    
-                    <label><input type="radio" name="regular2" id="no2" value="N">One-off</label>    
+                    <label><input type="radio" name="typeOfTrip2" id="yes2" value="R">Regular</label>    
+                    <label><input type="radio" name="typeOfTrip2" id="no2" value="O">One-off</label>    
                 </div>
                 <div class="checkbox checkbox-inline regular2">
                     <label><input type="checkbox" value="1" id="monday2" name="monday2"> Monday</label>    
@@ -340,13 +360,30 @@
     myradio.click(function(){
         if ($(this).is(':checked'))
         {
-            if($(this).val() == "regular"){
+            if($(this).val() == "R"){
                 $('.oneoff').hide(); $('.regular').show();
             }else{
                 $('.regular').hide(); $('.oneoff').show();
             }
         }
     });
+
+        // Edit Trip form: hide All date-time-checkbox inputs
+        $('.regular2').hide(); $('.oneoff2').hide();
+    
+    // hide/show input depending on whether the trip is a regular or one-off
+    var myradio2 = $('input[name="typeOfTrip2"]');
+    myradio2.click(function(){
+        if ($(this).is(':checked'))
+        {
+            if($(this).val() == "R"){
+                $('.oneoff2').hide(); $('.regular2').show();
+            }else{
+                $('.regular2').hide(); $('.oneoff2').show();
+            }
+        }
+    });
+
     //Calendar Input
     $('input[name="date2"], input[name="Date"]').datepicker({
         showAnim: "fadeIn",

@@ -6,31 +6,42 @@ import javax.persistence.*;
 
 @Entity
 public class User {
+
+    private static final long serialVersionUID =  23L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "user_id")
     private int userId;
+
     @NotNull
     @Column(unique = true)
     private String username;
+
     @Column
     private String firstname;
+
     @Column
     private String lastname;
+
     @Column
     private String password;
+
     @Column
     private String phoneNumber;
+
     @Column
     private String gender;
+
     @NotNull
     @Column(unique = true)
     private String email;
+
     @Column(name = "verification_code",length = 64)
     private String verificationCode;
+
     @Column
     private boolean enabled;
-
 
     public int getUserId() {
         return this.userId;
@@ -115,6 +126,5 @@ public class User {
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
-
 
 }

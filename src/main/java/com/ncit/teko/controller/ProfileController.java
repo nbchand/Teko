@@ -1,5 +1,7 @@
 package com.ncit.teko.controller;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpSession;
 
 import com.ncit.teko.functionality.PatternMatcher;
@@ -8,14 +10,17 @@ import com.ncit.teko.service.UserProfileService;
 import com.ncit.teko.service.UserSignupService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
+@RequestMapping("/profile")
 public class ProfileController {
 
     @Autowired
@@ -24,94 +29,87 @@ public class ProfileController {
     @Autowired
     private UserSignupService userSignupService;
 
-    @GetMapping("/profile")
+    @GetMapping("")
     public String showProfile(Model model, HttpSession session){
-
-        int userId = (int)session.getAttribute("userId");
 
         if(session.getAttribute("userId")==null){
             return "index";
         }
+
+        int userId = (int)session.getAttribute("userId");
         User user = userProfileService.fetchUserByUserId(userId);
-        model.addAttribute("username1", "@"+user.getUsername());
-        model.addAttribute("username2", user.getUsername());
+        model.addAttribute("username", user.getUsername());
         model.addAttribute("email", user.getEmail());
         return "profile";
     }
 
-    @PostMapping("/profile/update-username")
-    public String updateUserName(@RequestParam("username") String newUsername,
-                                RedirectAttributes redirectAttributes, HttpSession session){
+    @PostMapping("/update-username")
+    public ResponseEntity<?> updateUserName(@RequestBody String newUsername, HttpSession session){
 
         if(!PatternMatcher.checkUsernamePattern(newUsername)){
-            redirectAttributes.addFlashAttribute("updateMessage", "invalid username");
-            return "redirect:/profile";
+            return new ResponseEntity<>("invalid username",HttpStatus.OK);
         }
 
         if(userSignupService.isUserNameTaken(newUsername)){
-
-            redirectAttributes.addFlashAttribute("updateMessage", "username is already taken");
-            return "redirect:/profile";
+            return new ResponseEntity<>("username is already taken",HttpStatus.OK);
         }
         
         int userId = (int)session.getAttribute("userId");
         userProfileService.updateUsername(userId, newUsername);
 
-        redirectAttributes.addFlashAttribute("updateMessage", "username updated successfully");
-        return "redirect:/profile";
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PostMapping("/profile/update-email")
-    public String updateEmail(@RequestParam("email") String newEmail,
-                            RedirectAttributes redirectAttributes, HttpSession session){
+
+    @PostMapping("/update-email")
+    public ResponseEntity<?> updateEmail(@RequestBody String newEmail, HttpSession session){
 
         if(!PatternMatcher.checkEmailPattern(newEmail)){
-            redirectAttributes.addFlashAttribute("updateMessage", "invalid characters in the email");
-            return "redirect:/profile";
+            return new ResponseEntity<>("invalid characters in the email",HttpStatus.OK);
         }
         if(userSignupService.isEmailTaken(newEmail)){
-            redirectAttributes.addFlashAttribute("updateMessage", "account of this email already exists");
-            return "redirect:/profile";            
+            return new ResponseEntity<>("account of this email already exists",HttpStatus.OK);            
         }
 
         int userId = (int)session.getAttribute("userId");
         User user = userProfileService.fetchUserByUserId(userId);
         
         userProfileService.sendConfirmMail(user, newEmail);
-        redirectAttributes.addFlashAttribute("updateMessage", "confirmation email sent");
-        return "redirect:/profile";
+
+        return new ResponseEntity<>("success",HttpStatus.OK);
     }
 
-    @GetMapping("/profile/change-email")
+    @GetMapping("/change-email")
     public String setNewEmail(){
         /* logic here */
         return "redirect:/";
     }
 
-    @PostMapping("/profile/update-password")
-    public String updatePassword(@RequestParam("password1") String prevPassword, 
-                                @RequestParam("password2") String newPassword,
-                                @RequestParam("password3") String confirmNewPassword, 
-                                RedirectAttributes redirectAttributes, HttpSession session){
+    @PostMapping("/update-password")
+    public ResponseEntity<?> updatePassword(@RequestBody Map<String, String> json, HttpSession session){
+
+        String prevPassword = json.get("prevPassword");
+        String newPassword = json.get("newPassword");
+        String confirmNewPassword = json.get("confirmNewPassword");
 
         int userId = (int)session.getAttribute("userId");
         User user = userProfileService.fetchUserByUserId(userId);
 
         if(!userProfileService.validatePassword(user, prevPassword)){
-            redirectAttributes.addFlashAttribute("updateMessage", "old password is incorrect");
-            return "redirect:/profile";
+            return new ResponseEntity<>("old password is incorrect",HttpStatus.OK);
         }
         if(!newPassword.equals(confirmNewPassword)){
-            redirectAttributes.addFlashAttribute("updateMessage", "new password and confirmation password don't match");
-            return "redirect:/profile";              
+            return new ResponseEntity<>("new passwords don't match",HttpStatus.OK);             
         }
         if(!PatternMatcher.checkPasswordPattern(newPassword) || !PatternMatcher.checkPasswordPattern(confirmNewPassword)){
-            redirectAttributes.addFlashAttribute("updateMessage", "new password is invalid");
-            return "redirect:/profile";       
+            return new ResponseEntity<>("new password is invalid",HttpStatus.OK);      
+        }
+        if(newPassword.equals(prevPassword)){
+            return new ResponseEntity<>("new password can't be same as old password",HttpStatus.OK);
         }
         userProfileService.updatePassword(userId, newPassword);
-        redirectAttributes.addFlashAttribute("updateMessage","password updated sucessfully");
-        return "redirect:/profile";
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }

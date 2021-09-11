@@ -1,7 +1,5 @@
 package com.ncit.teko.repository;
 
-
-
 import com.ncit.teko.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -37,4 +35,5 @@ public interface UserRepo extends JpaRepository<User,Integer> {
     @Modifying(flushAutomatically = true)
     @Query(value = "update user u set u.password = :psw where u.user_id = :uId", nativeQuery = true)
     void updatePassword(@Param("uId") int userId, @Param("psw") String password);
+    
 }
