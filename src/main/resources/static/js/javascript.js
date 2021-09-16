@@ -126,17 +126,19 @@ $("#forgotpasswordform").submit(function(event){
 });
 
 //Ajax Call for the search form 
-$("#searchform").submit(function(event){
-    $("#results").fadeOut();
-    $("#spinner").css("display", "block");
-    event.preventDefault();
-    data = $(this).serializeArray();
-    console.log(data);
+// $("#searchform").submit(function(event){
+//     $("#results").fadeOut();
+//     $("#spinner").css("display", "block");
+//     event.preventDefault();
+
+//     const departure = $('input[id="departure"]').val();
+//     const destination = $('input[id="destination"]').val();
+
+//     const datatopost = JSON.stringify({departure,destination});
+
+//     submitSearchTripRequest(datatopost);
     
-    
-    getSearchTripDepartureCoordinates();
-    
-});
+// });
                         
     // //define functions
     // function getSearchTripDepartureCoordinates(){
@@ -180,33 +182,33 @@ $("#searchform").submit(function(event){
 
     // }
 
-    function submitSearchTripRequest(){
-        console.log(data);
-        $.ajax({
-            url: "search.php",
-            data: data,
-            type: "POST",
-            success: function(data2){
-                console.log(data);
-                if(data2){
-                    $('#results').html(data2);
-                    //accordion
-                    $("#message").accordion({
-                        icons: false,
-                        active:false,
-                        collapsible: true,
-                        heightStyle: "content"   
-                    });
-                }
-                $("#spinner").css("display", "none");
-                $("#results").fadeIn();
-        },
-            error: function(){
-                $("#results").html("<div class='alert alert-danger'>There was an error with the Ajax Call. Please try again later.</div>");
-                $("#spinner").css("display", "none");
-                $("#results").fadeIn();
+    //accordion to make search results look cooler
+    $(".accordion").accordion({
+        animate:true,
+        icons: false,
+        active:false,
+        collapsible: true,
+        heightStyle: "content"   
+    });
 
-    }
-        }); 
+    // function submitSearchTripRequest(datatopost){
+    //     console.log(datatopost);
+    //     $.ajax({
+    //         url: "/search-trips",
+    //         data: datatopost,
+    //         type: "POST",
+    //         cache: false,
+    //         contentType: "application/json",
+    //         success: function(){
+    //             $("#spinner").css("display", "none");
+    //             $("#results").fadeIn();
+    //     },
+    //         error: function(){
+    //             $("#results").html("<div class='alert alert-danger'>There was an error with the Ajax Call. Please try again later.</div>");
+    //             $("#spinner").css("display", "none");
+    //             $("#results").fadeIn();
 
-    }
+    // }
+    //     }); 
+
+    // }

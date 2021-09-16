@@ -76,7 +76,7 @@
         }
 
         .perseat {
-            font-size: 0.5em;
+            font-size: 0.8em;
         }
 
         .journey {
@@ -117,11 +117,13 @@
         .journeysummary {
             text-align: left;
             font-size: 1.5em;
+            margin-top: 2%;
         }
 
         .noresults {
             text-align: center;
             font-size: 1.5em;
+            margin-top: 2%;
         }
 
         .previewing {
@@ -182,7 +184,7 @@
                 </p>
 
                 <!--Search Form-->
-                <form class="form-inline" method="get" id="searchform">
+                <form class="form-inline" method="POST"action="/search-trips" id="searchform">
                     <div class="form-group">
                         <label class="sr-only" for="departure">Departure:</label>
                         <input type="text" class="form-control" id="departure" placeholder="Departure" name="departure">
@@ -207,79 +209,48 @@
                 <button type="button" class="btn btn-lg green signup" data-toggle="modal"
                     data-target="#signupModal">Sign up-It's free</button>
 
-
-                <div id="results">
-                    <!--will be filled with Ajax Call-->
-                    <div class='alert alert-info noresults'>There are no journeys matching your search!</div>
-                    <div class="tripsAvailable">
-                    <div class='alert alert-success journeysummary'>From $departure to $destination.<br />Closest Journeys:</div>
-          
-                    <div id="message">
-                      <div id="tripResults">
-                        <div class='row alert alert-success'>
-          
-                          <div class='col-sm-2 journey'>
-                            <div class='driver'><p>Firstname</p>
-                            </div>
-                            
+                    <!-- Search result start -->
+                    <div id="results" th:if="${trips}">
+                      <!--will be filled with Ajax Call-->
+                      <div class='alert alert-info noresults' th:if="${trips.isEmpty()}">There are no journeys matching your search!</div>
+                      <div class='alert alert-success journeysummary' th:unless="${trips.isEmpty()}">From <span th:text="${departure}"></span> to <span th:text="${destination}"></span>.<br />Closest Journeys:</div>
+                      <!-- journey info starts -->
+                      <div class="accordion journeyinfo" th:unless="${trips.isEmpty()}" th:each="trip: ${trips}">
+                        <!-- trip info starts -->
+                        <div class="row trip">
+                          <div class="col-sm-8 journey">
+                              <div><span class="departure">Departure: </span><span th:text="${trip.departure}"></span></div>
+                              <div><span class="destination">Destination: </span><span th:text="${trip.destination}"></span></div>
+                              <div>
+                                  <span th:text="${trip.typeOfTrip}=='O'?${#dates.format(trip.date, 'E dd MMM, yyyy')}:${trip.days}"></span>
+                                  <span class="time" th:text="' at '+${#dates.format(trip.time, 'hh:mm aa')}"></span>
+                              </div>
+                              <div th:text="${trip.typeOfTrip}=='O'?'One-Off journey':'Regular'"></div>
                           </div>
-          
-                          <div class='col-sm-8 journey'>
-                            <div>
-                              <span class='departure'>Departure:
-                              </span>
-                              $tripDeparture.
-                            </div>
-                            <div>
-                              <span class='destination'>Destination:
-                              </span>
-                              $tripDestination.
-                            </div>
-                            <div class='time'>
-                              $time
-                            </div>
-                            <div>
-                              $frequency
-                            </div>
+                          <div class="col-sm-4 price">
+                              <div class="price" th:text="'$'+${trip.price}"></div>
+                              <div class="perseat">Per Seat</div>
+                              <div class="seatsavailable" th:text="${trip.availableSeats}+' left'"></div>
                           </div>
-          
-                          <div class='col-sm-2 price journey2'>
-                            <div class='price'>
-                              <p> Price In RS</p>
-                            </div>
-          
-                            <div class='perseat'>
-                              Per Seat
-                            </div>
-                            <div class='seatsavailable'>
-                              $seatsAvailable left
-                            </div>
-                          </div>
-          <hr>
-                        <div class='moreinfo alert alert-info hsp'>
-                          <div >
-                            <div style="margin-top: 100px;">
-                              Gender: $gender
-                            </div>
-                            <div class='telephone'>
-                              &#9742: $phonenumber
-                            </div>
-                          </div>
-                          
-                        </div>
-                        </div>
                       </div>
-          
-          
+                        <!-- trip info ends -->
+                        <!-- moreinfo div starts here -->
+                        <div class="moreinfo">
+                            <div class='telephone'>
+                              &#9742: Please sign up! Only members can have access to contact information
+                            </div>
+                        </div>
+                          <!-- moreinfo div ends here -->
+                      </div>
+                      <!-- journey info ends -->
                     </div>
-                    </div>
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
+                    <!-- search result end -->
+  
+              </div>
+  
+          </div>
+  
+      </div>
     <!--Login form-->
   <form method="post" action="/login" id="loginform">
     <div class="modal" id="loginModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

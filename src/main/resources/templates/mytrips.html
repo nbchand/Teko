@@ -182,7 +182,7 @@
                         <div class="row trip">
                           <div class="col-sm-8 journey">
                               <div><span class="departure">Departure: </span><span th:text="${trip.departure}"></span></div>
-                              <div><span class="destination">Destination: </span><span  th:text="${trip.destination}"></span></div>
+                              <div><span class="destination">Destination: </span><span th:text="${trip.destination}"></span></div>
                               <div>
                                   <span th:text="${trip.typeOfTrip}=='O'?${#dates.format(trip.date, 'E dd MMM, yyyy')}:${trip.days}"></span>
                                   <span class="time" th:text="' at '+${#dates.format(trip.time, 'hh:mm aa')}"></span>
