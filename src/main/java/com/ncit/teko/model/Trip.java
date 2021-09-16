@@ -1,5 +1,6 @@
 package com.ncit.teko.model;
 
+import java.io.Serializable;
 import java.sql.Date;
 import java.sql.Time;
 import java.text.DateFormat;
@@ -15,9 +16,9 @@ import com.sun.istack.NotNull;
 
 
 @Entity
-public class Trip {
+public class Trip implements Serializable {
 
-    private static final long serialVersionUID = 100L;
+    private static final long serialVersionUID = 1L;
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

@@ -15,8 +15,10 @@ public interface UserRepo extends JpaRepository<User,Integer> {
 
     boolean existsUserByEmail(String email);
 
-    @Query(value = "select * from user where  email = :em and password = :psw ", nativeQuery = true)
-    User checkUser(@Param("em") String email, @Param("psw") String password);
+    User findByEmail(String email);
+    
+    // @Query(value = "select * from user where  email = :em and password = :psw ", nativeQuery = true)
+    // User checkUser(@Param("em") String email, @Param("psw") String password);
 
     @Query(value = "select * from user where verification_code = :c ", nativeQuery = true)
     User checkByVerificationCode(@Param("c") String code);

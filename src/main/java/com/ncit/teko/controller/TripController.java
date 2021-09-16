@@ -2,11 +2,9 @@ package com.ncit.teko.controller;
 
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import com.ncit.teko.functionality.PatternMatcher;
-import com.ncit.teko.functionality.StringHandler;
 import com.ncit.teko.model.Trip;
 import com.ncit.teko.model.User;
 import com.ncit.teko.service.TripCreateService;
@@ -31,7 +29,6 @@ public class TripController {
 
     @Autowired
     private TripCreateService tripCreateService;
-
 
     @GetMapping("")
     public String showMyTrips(HttpSession session, Model model){

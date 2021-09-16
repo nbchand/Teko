@@ -175,8 +175,10 @@
                           Add trips
                       </button>
                   </div>
+
                   <div id="mytrips" class="trips">
-                    <th:block th:each="trip: ${trips}">
+                    <div th:if="${trips.isEmpty()}" class="alert alert-info">You have not created any trips yet</div>
+                    <th:block th:each="trip: ${trips}" th.unless="${trips.isEmpty()}">
                         <div class="row trip">
                           <div class="col-sm-8 journey">
                               <div><span class="departure">Departure: </span><span th:text="${trip.departure}"></span></div>

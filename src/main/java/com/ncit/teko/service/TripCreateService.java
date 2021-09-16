@@ -3,7 +3,6 @@ package com.ncit.teko.service;
 import java.util.List;
 
 import com.ncit.teko.model.Trip;
-import com.ncit.teko.model.User;
 import com.ncit.teko.repository.TripRepo;
 
 import org.springframework.beans.factory.annotation.Autowired;

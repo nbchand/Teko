@@ -2,12 +2,14 @@ package com.ncit.teko.model;
 
 import com.sun.istack.NotNull;
 
+import java.io.Serializable;
+
 import javax.persistence.*;
 
 @Entity
-public class User {
+public class User implements Serializable {
 
-    private static final long serialVersionUID =  23L;
+    private static final long serialVersionUID =  2L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -125,6 +127,22 @@ public class User {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+            " userId='" + getUserId() + "'" +
+            ", username='" + getUsername() + "'" +
+            ", firstname='" + getFirstname() + "'" +
+            ", lastname='" + getLastname() + "'" +
+            ", password='" + getPassword() + "'" +
+            ", phoneNumber='" + getPhoneNumber() + "'" +
+            ", gender='" + getGender() + "'" +
+            ", email='" + getEmail() + "'" +
+            ", verificationCode='" + getVerificationCode() + "'" +
+            ", enabled='" + isEnabled() + "'" +
+            "}";
     }
 
 }

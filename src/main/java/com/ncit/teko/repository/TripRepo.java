@@ -10,4 +10,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TripRepo extends JpaRepository<Trip,Integer> {
     List<Trip> findByuId(int uId);
+    List<Trip> findByDepartureAndDestination(String departure, String destination);
 }

@@ -200,7 +200,8 @@
                 <!--Google Map-->
                 <div id="googleMap"></div>
 
-                <p id="errorMessage" class="error" th:text="${errorMessage}" style=" font: 20px VT323, monospace; color:red;"></p>
+                <!-- Verification message -->
+                <div th:if="${msg}" class="alert alert-info" th:text="${msg}"></div>
 
                 <!--Sign up button-->
                 <button type="button" class="btn btn-lg green signup" data-toggle="modal"
@@ -209,6 +210,69 @@
 
                 <div id="results">
                     <!--will be filled with Ajax Call-->
+                    <div class='alert alert-info noresults'>There are no journeys matching your search!</div>
+                    <div class="tripsAvailable">
+                    <div class='alert alert-success journeysummary'>From $departure to $destination.<br />Closest Journeys:</div>
+          
+                    <div id="message">
+                      <div id="tripResults">
+                        <div class='row alert alert-success'>
+          
+                          <div class='col-sm-2 journey'>
+                            <div class='driver'><p>Firstname</p>
+                            </div>
+                            
+                          </div>
+          
+                          <div class='col-sm-8 journey'>
+                            <div>
+                              <span class='departure'>Departure:
+                              </span>
+                              $tripDeparture.
+                            </div>
+                            <div>
+                              <span class='destination'>Destination:
+                              </span>
+                              $tripDestination.
+                            </div>
+                            <div class='time'>
+                              $time
+                            </div>
+                            <div>
+                              $frequency
+                            </div>
+                          </div>
+          
+                          <div class='col-sm-2 price journey2'>
+                            <div class='price'>
+                              <p> Price In RS</p>
+                            </div>
+          
+                            <div class='perseat'>
+                              Per Seat
+                            </div>
+                            <div class='seatsavailable'>
+                              $seatsAvailable left
+                            </div>
+                          </div>
+          <hr>
+                        <div class='moreinfo alert alert-info hsp'>
+                          <div >
+                            <div style="margin-top: 100px;">
+                              Gender: $gender
+                            </div>
+                            <div class='telephone'>
+                              &#9742: $phonenumber
+                            </div>
+                          </div>
+                          
+                        </div>
+                        </div>
+                      </div>
+          
+          
+                    </div>
+                    </div>
                 </div>
 
             </div>
@@ -232,7 +296,7 @@
           <div class="modal-body">
 
             <!-- Login message from PHP file-->
-            <!--<div id="loginmessage" th:text="${loginmessage}"></div> -->
+            <div id="loginmessage"></div>
 
 
             <div class="form-group">
@@ -272,7 +336,7 @@
     </div>
   </form>
     <!--Sign up form-->
-  <form method="post" action="/signup" id="signupform">
+  <form method="post" id="signupform">
     <div class="modal" id="signupModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -286,7 +350,7 @@
           </div>
           <div class="modal-body">
 
-            <!--Sign up message from PHP file-->
+            <!--Sign up message from ajax call-->
             <div id="signupmessage"></div>
 
             <div class="form-group">
@@ -317,12 +381,12 @@
             <div class="form-group">
               <label for="password" class="sr-only">Choose a password:</label>
               <input class="form-control" type="password" name="password" id="password" placeholder="Choose a password(8-30 characters)"
-                maxlength="30" onkeyup="check();" required>
+                maxlength="30" required>
             </div>
             <div class="form-group">
               <label for="confirm_password" class="sr-only">Confirm password</label>
               <input class="form-control" type="password" name="password2" id="confirm_password" placeholder="Confirm password"
-                maxlength="30" onkeyup="check();" required>
+                maxlength="30" required>
             </div>
             <div class="form-group">
               <label><input type="radio" name="gender" id="male" value="male">Male</label>
@@ -342,7 +406,7 @@
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="js/bootstrap.min.js"></script>
     <script src="map.js"></script>
-    <script src="javascript.js"></script>
+    <script src="js/javascript.js"></script>
 
     <!-- Footer-->
     <div class="footer">

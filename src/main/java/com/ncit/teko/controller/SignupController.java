@@ -1,16 +1,19 @@
 package com.ncit.teko.controller;
 
+import java.util.Map;
+
 import com.ncit.teko.functionality.PatternMatcher;
 import com.ncit.teko.model.User;
 import com.ncit.teko.service.UserSignupService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -20,74 +23,74 @@ public class SignupController {
     private UserSignupService userSignupService;
 
     @PostMapping("/signup")
-    public String saveUser(@ModelAttribute User user, @RequestParam("password2") String confirmPassword, RedirectAttributes redirectAttributes){
+    public ResponseEntity<?> saveUser(@RequestBody Map<String,String> json){
         
-        String username = user.getUsername();
-        String email = user.getEmail();
-        String fName = user.getFirstname();
-        String lName = user.getLastname();
-        String phoneNumber = user.getPhoneNumber();
-        String password = user.getPassword();
-        String gender = user.getGender();
-        System.out.println(gender);
+        String username = json.get("username");
+        String email = json.get("email");
+        String fName = json.get("firstname");
+        String lName = json.get("lastname");
+        String phoneNumber = json.get("phoneNumber");
+        String password = json.get("password");
+        String gender = json.get("gender");
+        String confirmPassword = json.get("confirmPassword");
 
+        User user = new User();
+        user.setEmail(email);
+        user.setFirstname(fName);
+        user.setGender(gender);
+        user.setLastname(lName);
+        user.setPassword(password);
+        user.setUsername(username);
+        user.setPhoneNumber(phoneNumber);
+
+
+        if(username.equals("")||email.equals("")||fName.equals("")||lName.equals("")||phoneNumber.equals("")||
+            password.equals("")||gender.equals("")||confirmPassword.equals("")){
+            return new ResponseEntity<>("Please fill all the necessary input fields",HttpStatus.OK);
+        }
+        
         if(!PatternMatcher.checkNamePattern(fName)){
-            redirectAttributes.addFlashAttribute("errorMessage", "First name is invalid");
-            return "redirect:/";
+            return new ResponseEntity<>("First name is invalid",HttpStatus.OK);
         }
 
         if(!PatternMatcher.checkNamePattern(lName)){
-            redirectAttributes.addFlashAttribute("errorMessage", "Last name is invalid");
-            return "redirect:/";
+            return new ResponseEntity<>("Last name is invalid",HttpStatus.OK);
         }
 
         if(!PatternMatcher.checkEmailPattern(email)){
-            redirectAttributes.addFlashAttribute("errorMessage", "Email address is invalid");
-            return "redirect:/";
+            return new ResponseEntity<>("Email address is invalid",HttpStatus.OK);
         }
 
         if(!PatternMatcher.checkUsernamePattern(username)){
-            redirectAttributes.addFlashAttribute("errorMessage", "Username is invalid");
-            return "redirect:/";
+            return new ResponseEntity<>("Username is invalid",HttpStatus.OK);
         }
 
         if(!PatternMatcher.checkPhoneNumberPattern(phoneNumber)){
-            redirectAttributes.addFlashAttribute("errorMessage", "Invalid phone number");
-            return "redirect:/";
+            return new ResponseEntity<>("Invalid phone number",HttpStatus.OK);
         }
 
         if(!PatternMatcher.checkPasswordPattern(password)){
-            redirectAttributes.addFlashAttribute("errorMessage", "Password invalid");
-            return "redirect:/";
+            return new ResponseEntity<>("Password invalid",HttpStatus.OK);
+
         }
 
         if(!password.equals(confirmPassword)){
-            redirectAttributes.addFlashAttribute("errorMessage", "Passwords don't match");
-            return "redirect:/";
-        }
-
-        if(gender==null){
-            redirectAttributes.addFlashAttribute("errorMessage", "Select a gender");
-            return "redirect:/";
+            return new ResponseEntity<>("Passwords don't match",HttpStatus.OK);
         }
 
         if(userSignupService.doesUserAlreadyExists(username,email)){
 
             if(userSignupService.isEmailTaken(email)){
-
-                redirectAttributes.addFlashAttribute("errorMessage", "Account of this email already exists!");
-                return "redirect:/";
+                return new ResponseEntity<>("Account of this email already exists!",HttpStatus.OK);
             }
 
             if(userSignupService.isUserNameTaken(username)){
-                redirectAttributes.addFlashAttribute("errorMessage","Username already taken!");
-                return "redirect:/";
+                return new ResponseEntity<>("Username already taken!",HttpStatus.OK);
             }
 
         }
         userSignupService.userSignup(user);
-        redirectAttributes.addFlashAttribute("errorMessage","verification mail sent");
-        return "redirect:/";
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @GetMapping("/signup/verify")
@@ -95,10 +98,10 @@ public class SignupController {
 
         if(userSignupService.verify(code)){
 
-            redirectAttributes.addFlashAttribute("errorMessage", "Verification Successful");
+            redirectAttributes.addFlashAttribute("msg", "Verification Successful");
             return "redirect:/";
         }else {
-            redirectAttributes.addFlashAttribute("errorMessage", "Verification Failed");
+            redirectAttributes.addFlashAttribute("msg", "Verification Failed");
             return "redirect:/";
         }
     }

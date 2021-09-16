@@ -10,8 +10,8 @@ public class UserLoginService {
     @Autowired
     private UserRepo userRepo;
 
-    public User loginUser(String email,String password){
-        return userRepo.checkUser(email,password);
+    public User loginUser(String email){
+        return userRepo.findByEmail(email);
     }
 
 }
