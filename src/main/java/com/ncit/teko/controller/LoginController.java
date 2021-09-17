@@ -33,6 +33,7 @@ public class LoginController {
                 return new ResponseEntity<>("Invalid password for the provided email",HttpStatus.OK);
             }
             session.setAttribute("userId", u.getUserId());
+            session.setAttribute("username", u.getUsername());
             session.setMaxInactiveInterval(1000);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }

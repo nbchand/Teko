@@ -68,7 +68,7 @@ public class TripController {
             return new ResponseEntity<>("departure and destination cannot be same",HttpStatus.OK);
         }
 
-        if(json.get("price").length()>7){
+        if(json.get("price").length()>6){
             return new ResponseEntity<>("please lower the ticket price",HttpStatus.OK);
         }
 

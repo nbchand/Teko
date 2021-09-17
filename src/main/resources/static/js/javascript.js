@@ -74,7 +74,7 @@ $("#loginform").submit(function(event){
                 $("#spinner").css("display", "none");
                 $("#loginmessage").slideDown();
             }else{
-                location.href = "/my-trips";
+                location.href = "/search";
             }
         },
         error: function(){

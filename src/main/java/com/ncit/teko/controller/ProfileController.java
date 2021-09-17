@@ -56,6 +56,7 @@ public class ProfileController {
         
         int userId = (int)session.getAttribute("userId");
         userProfileService.updateUsername(userId, newUsername);
+        session.setAttribute("username", newUsername);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

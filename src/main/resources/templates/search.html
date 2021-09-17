@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Car Sharing Website Final</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="styling.css" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Arvo' rel='stylesheet' type='text/css'>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/sunny/jquery-ui.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script
+        src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyDZsghShWc7tR9R_OchOxAOm7OvoKGLX8c&libraries=places">
+    </script>
+    <style>
+        /*margin top for myContainer*/
+        #myContainer {
+            margin-top: 50px;
+            text-align: center;
+            color: black;
+        }
+
+        /*header size*/
+        #myContainer h1 {
+            font-size: 5em;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        #googleMap {
+            width: 100%;
+            height: 30vh;
+            margin: 10px auto;
+        }
+
+        .signup {
+            margin-top: 20px;
+        }
+
+        #spinner {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            height: 85px;
+            text-align: center;
+            margin: auto;
+            z-index: 1100;
+        }
+
+        #results {
+            margin-bottom: 100px;
+        }
+
+        .driver {
+            font-size: 1.5em;
+            text-transform: capitalize;
+            text-align: center;
+        }
+
+        .price {
+            font-size: 1.5em;
+        }
+
+        .departure,
+        .destination {
+            font-size: 1.5em;
+        }
+
+        .perseat {
+            font-size: 0.8em;
+        }
+
+        .journey {
+            text-align: left;
+        }
+
+        .journey2 {
+            text-align: right;
+        }
+
+        .time {
+            margin-top: 10px;
+        }
+
+        .telephone {
+            margin-top: 10px;
+        }
+
+        .seatsavailable {
+            font-size: 0.7em;
+            margin-top: 5px;
+        }
+
+        .moreinfo {
+            text-align: left;
+        }
+
+        .aboutme {
+            border-top: 1px solid grey;
+            margin-top: 15px;
+            padding-top: 5px;
+        }
+
+        #message {
+            margin-top: 20px;
+        }
+
+        .journeysummary {
+            text-align: left;
+            font-size: 1.5em;
+            margin-top: 2%;
+        }
+
+        .noresults {
+            text-align: center;
+            font-size: 1.5em;
+            margin-top: 2%;
+        }
+
+        .previewing {
+            max-width: 100%;
+            height: auto;
+            border-radius: 50%;
+        }
+
+        .previewing2 {
+            margin: auto;
+            height: 20px;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+
+<body>
+  <!--Navigation Bar-->
+  <nav role="navigation" class="navbar navbar-custom navbar-fixed-top">
+
+    <div class="container-fluid">
+
+      <div class="navbar-header">
+
+        <a class="navbar-brand">TEKO</a>
+        <button type="button" class="navbar-toggle" data-target="#navbarCollapse" data-toggle="collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+
+        </button>
+      </div>
+      <div class="navbar-collapse collapse" id="navbarCollapse">
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="/search">Search</a></li>
+          <!-- <li><a href="#">Help</a></li>
+          <li><a href="#">Contact us</a></li> -->
+          <li><a href="/my-trips">My Trips</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="#">
+
+              <div class='image_preview' data-target='#updatepicture' data-toggle='modal'><img class='previewing2'
+                  src='profilepicture/noimage.jpg' /></div>
+
+
+
+            </a>
+          </li>
+          <li><a href="/profile" th:text="'@'+${username}"><b></b></a></li>
+          <li><a href="/logout">Log out</a></li>
+        </ul>
+
+      </div>
+    </div>
+
+  </nav>
+    <!-- End of Navigation Bar -->
+
+
+
+    <div class="container-fluid" id="myContainer">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <h2>TEKO: Connecting Riders And Passenger At One Place </h2>
+                <p class="lead">Share Your Journey And Cost</p>
+                <p class="bold">Just Enter Your Departure And Destination To Find Matching Riders
+                </p>
+
+                <!--Search Form-->
+                <form class="form-inline" method="POST" action="/search-trips" id="searchform">
+                    <div class="form-group">
+                        <label class="sr-only" for="departure">Departure:</label>
+                        <input type="text" class="form-control" id="departure" placeholder="Departure" name="departure">
+                    </div>
+                    <div class="form-group">
+                        <label class="sr-only"></label>
+                        <input type="text" class="form-control" id="destination" placeholder="Destination"
+                            name="destination">
+                    </div>
+                    <input type="submit" value="Search" class="btn btn-lg green" name="search">
+
+                </form>
+                <!--Search Form End-->
+
+                <!--Google Map-->
+                <div id="googleMap"></div>
+
+                    <!-- Search result start -->
+                    <div id="results" th:if="${trips}">
+                        <!--will be filled with Ajax Call-->
+                        <div class='alert alert-info noresults' th:if="${trips.isEmpty()}">There are no journeys matching your search!</div>
+                        <div class='alert alert-info journeysummary' th:unless="${trips.isEmpty()}">From <span th:text="${departure}"></span> to <span th:text="${destination}"></span>.<br />Closest Journeys:</div>
+                        <!-- journey info starts -->
+                        <div class="accordion journeyinfo" th:unless="${trips.isEmpty()}" th:each="i: ${#numbers.sequence(0, trips.size() - 1)}">
+                          <!-- trip info starts -->
+                          <div class="row trip">
+                            <div class="col-sm-8 journey">
+                                <div><span class="departure">Departure: </span><span th:text="${trips.get(i).departure}"></span></div>
+                                <div><span class="destination">Destination: </span><span th:text="${trips.get(i).destination}"></span></div>
+                                <div>
+                                    <span th:text="${trips.get(i).typeOfTrip}=='O'?${#dates.format(trips.get(i).date, 'E dd MMM, yyyy')}:${trips.get(i).days}"></span>
+                                    <span class="time" th:text="' at '+${#dates.format(trips.get(i).time, 'hh:mm aa')}"></span>
+                                </div>
+                                <div th:text="${trips.get(i).typeOfTrip}=='O'?'One-Off journey':'Regular'"></div>
+                            </div>
+                            <div class="col-sm-4 price">
+                                <div class="price" th:text="'$'+${trips.get(i).price}"></div>
+                                <div class="perseat">Per Seat</div>
+                                <div class="seatsavailable" th:text="${trips.get(i).availableSeats}+' left'"></div>
+                            </div>
+                        </div>
+                          <!-- trip info ends -->
+                          <!-- moreinfo div starts here -->
+                          <div class="moreinfo">
+                              <div class="creator-name">
+                                Trip creator: <span th:text="${users.get(i).firstname}+' '+${users.get(i).lastname}"></span>
+                              </div>
+                              <div class="gender">
+                                Gender: <span th:text="${users.get(i).gender}"></span>
+                              </div>
+                              <div class='telephone'>
+                                &#9742: <span th:text="${users.get(i).phoneNumber}"></span>
+                              </div>
+                          </div>
+                            <!-- moreinfo div ends here -->
+                        </div>
+                        <!-- journey info ends -->
+                      </div>
+                      <!-- search result end -->
+  
+  
+              </div>
+  
+          </div>
+  
+      </div>
+    
+   
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+    <script src="map.js"></script>
+    <script src="js/search.js"></script>
+
+    <!-- Footer-->
+    <div class="footer">
+        <div class="container">
+            <p>ibriztech.com Copyright &copy; 2021</p>
+        </div>
+    </div>
+
+</body>
+
+</html>

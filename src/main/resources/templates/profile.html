@@ -87,10 +87,10 @@
       </div>
       <div class="navbar-collapse collapse" id="navbarCollapse">
         <ul class="nav navbar-nav">
-          <li><a href="/">Search</a></li>
+          <li><a href="/search">Search</a></li>
           <!-- <li class="active"><a href="/profile">Profile</a></li> -->
-          <li><a href="#">Help</a></li>
-          <li><a href="#">Contact us</a></li>
+          <!-- <li><a href="#">Help</a></li>
+          <li><a href="#">Contact us</a></li> -->
           <li><a href="/my-trips">My Trips</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
@@ -103,7 +103,7 @@
 
             </a>
           </li>
-          <li><a href="/profile" th:text="'@'+${username}"><b></b></a></li>
+          <li class="active"><a href="/profile" th:text="'@'+${username}"><b></b></a></li>
           <li><a href="/logout">Log out</a></li>
         </ul>
 
