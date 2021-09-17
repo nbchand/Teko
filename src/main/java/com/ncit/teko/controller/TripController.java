@@ -4,10 +4,11 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
-import com.ncit.teko.functionality.PatternMatcher;
 import com.ncit.teko.model.Trip;
 import com.ncit.teko.model.User;
 import com.ncit.teko.service.TripCreateService;
+import com.ncit.teko.service.TripDeleteService;
+import com.ncit.teko.service.TripUpdateService;
 import com.ncit.teko.service.UserProfileService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping("/my-trips")
@@ -29,6 +31,12 @@ public class TripController {
 
     @Autowired
     private TripCreateService tripCreateService;
+
+    @Autowired
+    private TripDeleteService tripDeleteService;
+
+    @Autowired
+    private TripUpdateService tripUpdateService;
 
     @GetMapping("")
     public String showMyTrips(HttpSession session, Model model){
@@ -45,69 +53,113 @@ public class TripController {
     }
 
     @PostMapping("/create-trip")
-    public ResponseEntity<?> createTrip(@RequestBody Map<String,String> json, HttpSession session) throws Exception{
+    public ResponseEntity<String> createTrip(@RequestBody Map<String,String> json, HttpSession session){
 
         Trip trip = new Trip();
 
         int userId = (int)session.getAttribute("userId");
+        String response = tripCreateService.sendResponse(json, userId);
 
-        String time = json.get("Time");
-        String destination = json.get("destination");
-        String departure = json.get("departure");
-
-        if(!PatternMatcher.checkNumberPattern(json.get("price"))||!PatternMatcher.checkNumberPattern(json.get("availableSeats"))){
-            return new ResponseEntity<>("invalid input",HttpStatus.OK);
+        if(!response.equals("")){
+            return new ResponseEntity<>(response, HttpStatus.OK);
         }
 
-        if(time.equals("")||departure.equals("")||destination.equals("")||json.get("availableSeats").equals("")
-            ||json.get("typeOfTrip").equals("")||json.get("price").equals("")){
-            return new ResponseEntity<>("fill all the necessary input fields",HttpStatus.OK);
+        trip.setAvailableSeats(Integer.parseInt(json.get("availableSeats")));
+        trip.setDeparture(json.get("departure"));
+        trip.setDestination(json.get("destination"));
+
+        try{
+            trip.setTime(json.get("Time"));
+        }catch(Exception e){
+            System.out.println(e);
+            return new ResponseEntity<>("error occured while setting time",HttpStatus.OK);
         }
 
-        if(departure.equals(destination)){
-            return new ResponseEntity<>("departure and destination cannot be same",HttpStatus.OK);
-        }
 
-        if(json.get("price").length()>6){
-            return new ResponseEntity<>("please lower the ticket price",HttpStatus.OK);
-        }
-
-        if(json.get("availableSeats").length()>4){
-            return new ResponseEntity<>("please enter available seats only upto 4 digits",HttpStatus.OK);
-        }
-
-        int price = Integer.parseInt(json.get("price"));
-        int seats = Integer.parseInt(json.get("availableSeats"));
-        char typeOfTrip = json.get("typeOfTrip").charAt(0);
-
-        if(seats==0){
-            return new ResponseEntity<>("numbers of available seats must be greater than 0",HttpStatus.OK);
-        }
-
-        trip.setTime(time);
-        trip.setAvailableSeats(seats);
-        trip.setDeparture(departure);
-        trip.setDestination(destination);
-        trip.setPrice(price);
-        trip.setTypeOfTrip(typeOfTrip);
+        trip.setPrice(Integer.parseInt(json.get("price")));
+        trip.setTypeOfTrip(json.get("typeOfTrip").charAt(0));
         trip.setUId(userId);
 
-        if(typeOfTrip == 'O'){
-            String date = json.get("date");
-            if(date.equals("")){
-                return new ResponseEntity<>("fill all the necessary input fields",HttpStatus.OK);
+        if(json.get("typeOfTrip").charAt(0) == 'O'){
+            try{
+                trip.setDate(json.get("date"));
+            }catch(Exception e){
+                System.out.println(e);
+                return new ResponseEntity<>("error occured while setting date",HttpStatus.OK);
             }
-            trip.setDate(date);
+
             tripCreateService.createTrip(trip);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
          }
-        
-        String days = json.get("days");
-        if(days.equals("")){
-            return new ResponseEntity<>("fill all the necessary input fields",HttpStatus.OK);
-        }
-        trip.setDays(days);
+
+        trip.setDays(json.get("days"));
         tripCreateService.createTrip(trip);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PostMapping("/getTrip")
+    public ResponseEntity<Trip> getTripInfo(@RequestBody String id){
+        Trip trip = tripCreateService.getById(Integer.parseInt(id));
+        if(trip==null){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(trip, HttpStatus.OK);
+    }
+
+    @PostMapping("/delete-trip")
+    @ResponseBody
+    public String removeTrip(@RequestBody String id){
+        if(tripCreateService.getById(Integer.parseInt(id))==null){
+            return "";
+        }
+        try{
+            tripDeleteService.deleteTrip(Integer.parseInt(id));
+            return "success";
+        }catch(Exception e){
+            System.out.println(e);
+            return "";
+        }
+    }
+
+    @PostMapping("/edit-trip")
+    public ResponseEntity<String> editTrip(@RequestBody Map<String,String> json, HttpSession session){
+        Trip trip = new Trip();
+
+        int userId = (int)session.getAttribute("userId");
+        String response = tripCreateService.sendResponse(json, userId);
+
+        if(!response.equals("")){
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
+
+        trip.setAvailableSeats(Integer.parseInt(json.get("availableSeats")));
+        trip.setDeparture(json.get("departure"));
+        trip.setDestination(json.get("destination"));
+
+        try{
+            trip.setTime(json.get("Time"));
+        }catch(Exception e){
+            System.out.println(e);
+            return new ResponseEntity<>("error occured while setting time",HttpStatus.OK);
+        }
+
+        trip.setPrice(Integer.parseInt(json.get("price")));
+        trip.setTypeOfTrip(json.get("typeOfTrip").charAt(0));
+        trip.setUId(userId);
+
+        if(json.get("typeOfTrip").charAt(0) == 'O'){
+            try{
+                trip.setDate(json.get("date"));
+            }catch(Exception e){
+                System.out.println(e);
+                return new ResponseEntity<>("error occured while setting date",HttpStatus.OK);
+            }
+            tripUpdateService.updateTrip(trip, Integer.parseInt(json.get("id")));
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+         }
+
+        trip.setDays(json.get("days"));
+        tripUpdateService.updateTrip(trip, Integer.parseInt(json.get("id")));
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }  

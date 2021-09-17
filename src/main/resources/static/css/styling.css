@@ -6,7 +6,7 @@ html{
 /*Background Image*/
 body{
     font-family: Arvo, serif;
-    background: url("road.jpg") no-repeat center center;
+    background: url("../images/road.jpg") no-repeat center center;
     background-attachment: fixed;
     background-size: cover;
 }
