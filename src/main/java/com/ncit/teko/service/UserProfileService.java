@@ -7,6 +7,7 @@ import com.ncit.teko.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.DigestUtils;
 
 @Service
 @Transactional
@@ -39,14 +40,14 @@ public class UserProfileService {
     }
 
     public boolean validatePassword(User user,String password){
-        if(user.getPassword().equals(password)){
+        if(user.getPassword().equals(DigestUtils.md5DigestAsHex(password.getBytes()))){
             return true;
         }
         return false;
     }
 
     public void updatePassword(int userId, String password){
-        userRepo.updatePassword(userId, password);
+        userRepo.updatePassword(userId, DigestUtils.md5DigestAsHex(password.getBytes()));
     }
     
 }

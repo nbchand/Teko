@@ -2,6 +2,8 @@ package com.ncit.teko.model;
 
 import com.sun.istack.NotNull;
 
+import org.springframework.util.DigestUtils;
+
 import java.io.Serializable;
 
 import javax.persistence.*;
@@ -82,7 +84,7 @@ public class User implements Serializable {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.password = DigestUtils.md5DigestAsHex(password.getBytes());
     }
 
     public String getPhoneNumber() {

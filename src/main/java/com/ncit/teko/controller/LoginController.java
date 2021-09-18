@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -29,7 +30,7 @@ public class LoginController {
             if(!u.isEnabled()){
                 return new ResponseEntity<>("Verify email first",HttpStatus.OK);
             }
-            if(!json.get("password").equals(u.getPassword())){
+            if(!DigestUtils.md5DigestAsHex(json.get("password").getBytes()).equals(u.getPassword())){
                 return new ResponseEntity<>("Invalid password for the provided email",HttpStatus.OK);
             }
             session.setAttribute("userId", u.getUserId());
